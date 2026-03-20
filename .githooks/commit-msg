@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+COMMIT_MSG_FILE="${1:-}"
+
+if [ -z "$COMMIT_MSG_FILE" ] || [ ! -f "$COMMIT_MSG_FILE" ]; then
+  echo "❌ Ошибка: не удалось прочитать сообщение коммита."
+  exit 1
+fi
+
+COMMIT_SUBJECT=$(grep -vE '^\s*#' "$COMMIT_MSG_FILE" | sed -E '/^\s*$/d' | head -n 1)
+PATTERN='^(feat|fix|refactor|hotfix|docs):\ .+'
+
+if ! printf '%s\n' "$COMMIT_SUBJECT" | grep -Eq "$PATTERN"; then
+  echo "🚫 Неверный формат сообщения коммита."
+  echo "Ожидаемый формат: feat|fix|refactor|hotfix|docs: сообщение"
+  echo "Пример: feat: add user profile page"
+  exit 1
+fi
+
+exit 0
+
+
