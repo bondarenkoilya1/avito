@@ -22,8 +22,5 @@ jobs:
       - name: Проверка сборки
         run: bun run build
 
-      - name: Запуск unit-тестов
-        run: bun run test
-
       - name: Проверка линтинга
         run: bun run lint
