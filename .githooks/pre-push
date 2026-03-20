@@ -1,47 +1,47 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-LOCK_DIR="src"
+ROOT_DIR=$(git rev-parse --show-toplevel)
 
-echo "🔍 Переход в директорию $LOCK_DIR..."
-cd "$LOCK_DIR" || { echo "❌ Не удалось перейти в директорию $LOCK_DIR" && exit 1; }
+echo "🔍 Переход в корневую директорию репозитория..."
+cd "$ROOT_DIR" || { echo "❌ Не удалось перейти в корневую директорию репозитория" && exit 1; }
 
 echo "🔍 Определение lock-файла пакетного менеджера..."
 if [ -f bun.lock ] || [ -f bun.lockb ]; then
-	PACKAGE_MANAGER="bun"
+  PACKAGE_MANAGER="bun"
 elif [ -f package-lock.json ]; then
-	PACKAGE_MANAGER="npm"
+  PACKAGE_MANAGER="npm"
 else
-	echo "❌ В $LOCK_DIR не найден поддерживаемый lock-файл (bun.lock, bun.lockb, package-lock.json). Пуш отменен."
-	exit 1
+  echo "❌ В корне репозитория не найден поддерживаемый lock-файл (bun.lock, bun.lockb, package-lock.json). Пуш отменен"
+  exit 1
 fi
 
 echo "🔍 Запуск проверки безопасности через $PACKAGE_MANAGER..."
 if [ "$PACKAGE_MANAGER" = "bun" ]; then
-	if ! bun audit; then
-		echo "🚫 Найдены уязвимости. Пуш отменен."
-		exit 1
-	fi
+  if ! bun audit; then
+    echo "🚫 Найдены уязвимости. Пуш отменен"
+    exit 1
+  fi
 else
-	if ! npm audit --audit-level=low; then
-		echo "🚫 Найдены уязвимости. Пуш отменен."
-		exit 1
-	fi
+  if ! npm audit --audit-level=low; then
+    echo "🚫 Найдены уязвимости. Пуш отменен"
+    exit 1
+  fi
 fi
 
 echo "✅ Уязвимостей не найдено."
 
 echo "🔍 Проверка сборки через $PACKAGE_MANAGER..."
 if [ "$PACKAGE_MANAGER" = "bun" ]; then
-	if ! bun run build; then
-		echo "🚫 Сборка завершилась с ошибкой. Пуш отменен."
-		exit 1
-	fi
+  if ! bun run build; then
+    echo "🚫 Сборка завершилась с ошибкой. Пуш отменен"
+    exit 1
+  fi
 else
-	if ! npm run build; then
-		echo "🚫 Сборка завершилась с ошибкой. Пуш отменен."
-		exit 1
-	fi
+  if ! npm run build; then
+    echo "🚫 Сборка завершилась с ошибкой. Пуш отменен"
+    exit 1
+  fi
 fi
 
 echo "✅ Сборка прошла успешно."

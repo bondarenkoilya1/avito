@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR=$(git rev-parse --show-toplevel)
+
+echo "🔍 Переход в корневую директорию репозитория..."
+cd "$ROOT_DIR" || { echo "❌ Не удалось перейти в корневую директорию репозитория" && exit 1; }
+
+echo "🔍 Проверка наличия изменений для линтинга..."
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.(js|jsx|ts|tsx)$' || true)
+if [ -z "$STAGED_FILES" ]; then
+  echo "✅ Подходящих изменений нет. Пропуск pre-commit проверок"
+  exit 0
+fi
+
+echo "🔍 Определение lock-файла пакетного менеджера..."
+if [ -f bun.lock ] || [ -f bun.lockb ]; then
+  PACKAGE_MANAGER="bun"
+elif [ -f package-lock.json ]; then
+  PACKAGE_MANAGER="npm"
+else
+  echo "❌ В корне репозитория не найден поддерживаемый lock-файл (bun.lock, bun.lockb, package-lock.json). Коммит отменен"
+  exit 1
+fi
+
+echo "🔍 Запуск линтинга через $PACKAGE_MANAGER..."
+if [ "$PACKAGE_MANAGER" = "bun" ]; then
+  if ! bun run lint; then
+    echo "🚫 Линтинг завершился с ошибкой. Коммит отменен"
+    exit 1
+  fi
+else
+  if ! npm run lint; then
+    echo "🚫 Линтинг завершился с ошибкой. Коммит отменен"
+    exit 1
+  fi
+fi
+
+echo "✅ Линтинг пройден."
+
+
