@@ -23,6 +23,12 @@ else
   exit 1
 fi
 
+echo "🔍 Проверка наличия установленного пакетного менеджера ($PACKAGE_MANAGER)..."
+if ! command -v "$PACKAGE_MANAGER" &> /dev/null; then
+  echo "❌ Пакетный менеджер '$PACKAGE_MANAGER' не установлен. Пожалуйста, установите $PACKAGE_MANAGER и попробуйте снова. Коммит отменен"
+  exit 1
+fi
+
 echo "🔍 Запуск линтинга через $PACKAGE_MANAGER..."
 if [ "$PACKAGE_MANAGER" = "bun" ]; then
   if ! bun run lint; then
