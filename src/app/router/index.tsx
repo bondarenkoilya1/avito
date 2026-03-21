@@ -2,9 +2,10 @@ import type { JSX } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import { App } from "@/app/app";
-import { NotFoundPage } from "@/app/pages/not-found-page";
 
-import { AdDetailsPage, AdEditPage, AdsListPage } from "@/ads/ui";
+import { AdDetailsPage, AdEditPage, AdsListPage } from "@/features/ads/pages";
+
+import { NotFoundPage } from "@/shared/pages/not-found-page";
 
 export const Router = (): JSX.Element => {
   return (
