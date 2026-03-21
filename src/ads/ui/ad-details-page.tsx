@@ -6,4 +6,3 @@ export const AdDetailsPage = (): JSX.Element => {
 
   return <h1>Ad details: {id}</h1>;
 };
-
