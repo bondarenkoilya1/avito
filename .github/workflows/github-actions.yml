@@ -1,0 +1,26 @@
+name: CI/CD Pipeline
+run-name: "🚀 Запуск workflow от @${{ github.actor }}"
+
+on: [push]
+
+jobs:
+  init:
+    name: Проверки проекта
+    runs-on: ubuntu-latest
+    steps:
+      - name: Получение кода
+        uses: actions/checkout@v4
+
+      - name: Подготовка Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Установка зависимостей
+        run: bun install
+
+      - name: Проверка сборки
+        run: bun run build
+
+      - name: Проверка линтинга
+        run: bun run lint
