@@ -7,5 +7,5 @@ export const pluralize = (
 ): string => {
   const rules = new Intl.PluralRules(locale);
 
-  return variants[rules.select(number)];
+  return variants[rules.select(number)] as string;
 };
