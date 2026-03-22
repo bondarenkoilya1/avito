@@ -1,9 +1,9 @@
 import type { CSSProperties, JSX, ReactNode } from "react";
 
-interface ContainerProps {
+type ContainerProps = {
   children: ReactNode;
   style?: CSSProperties;
-}
+};
 
 export const Container = ({ children, style }: ContainerProps): JSX.Element => {
   return (
