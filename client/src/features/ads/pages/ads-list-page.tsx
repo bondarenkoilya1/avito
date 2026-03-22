@@ -1,19 +1,27 @@
 import { type JSX, useCallback, useMemo, useState } from "react";
 import { Flex, Space, Typography } from "antd";
 
-import { AdCard, Filter, PaginationComponent } from "@/features/ads/components";
+import { AdCard, type AdCardProps, Filter, PaginationComponent } from "@/features/ads/components";
 import { MOCK_ADS } from "@/features/ads/components/ad-card/ad-card.constans";
 import { type FilterCategory } from "@/features/ads/components/filter/filter.constants";
 import { type AdsSortValue, DEFAULT_ADS_SORT, Toolbar } from "@/features/ads/components/toolbar";
 
+import { api } from "@/shared/api";
 import { pluralize, type PluralizeVariants } from "@/shared/lib";
 import { Container } from "@/shared/ui";
+
+import { useQuery } from "@tanstack/react-query";
 
 const ADS_PLURAL_VARIANTS: PluralizeVariants = {
   one: "объявление",
   few: "объявления",
   many: "объявлений",
   other: "объявления"
+};
+
+type ItemsGetOut = {
+  items: AdCardProps[];
+  total: number;
 };
 
 const formatAdsNumber = (variants: PluralizeVariants, number: number): string =>
@@ -70,6 +78,16 @@ export const AdsListPage = (): JSX.Element => {
     setCurrentPage(1);
   }, []);
 
+  const getCards = async (): Promise<ItemsGetOut> => {
+    const cards = await api.get("/items");
+    return cards.data;
+  };
+
+  const { data } = useQuery({
+    queryKey: ["cards"],
+    queryFn: getCards
+  });
+
   return (
     <Container>
       <Flex vertical gap={16}>
@@ -77,7 +95,9 @@ export const AdsListPage = (): JSX.Element => {
           <Typography.Title level={3} style={{ marginBottom: 0 }}>
             Мои объявления
           </Typography.Title>
-          <Typography.Text>{formatAdsNumber(ADS_PLURAL_VARIANTS, totalAds)}</Typography.Text>
+          <Typography.Text>
+            {formatAdsNumber(ADS_PLURAL_VARIANTS, data?.total || 0)}
+          </Typography.Text>
         </Space>
 
         <Flex align="stretch" gap={48} style={{ flex: 1, minHeight: 0 }}>
