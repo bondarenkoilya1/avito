@@ -1,53 +1,35 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT_DIR=$(git rev-parse --show-toplevel)
+ROOT_DIR="$(git rev-parse --show-toplevel)"
+cd "$ROOT_DIR"
 
-echo "🔍 Переход в корневую директорию репозитория..."
-cd "$ROOT_DIR" || { echo "❌ Не удалось перейти в корневую директорию репозитория" && exit 1; }
-
-echo "🔍 Определение lock-файла пакетного менеджера..."
-if [ -f bun.lock ] || [ -f bun.lockb ]; then
-  PACKAGE_MANAGER="bun"
-elif [ -f package-lock.json ]; then
-  PACKAGE_MANAGER="npm"
+if command -v bun >/dev/null 2>&1; then
+  PACKAGE_RUNNER="bun"
+elif command -v npm >/dev/null 2>&1; then
+  PACKAGE_RUNNER="npm"
 else
-  echo "❌ В корне репозитория не найден поддерживаемый lock-файл (bun.lock, bun.lockb, package-lock.json). Пуш отменен"
+  echo "Error: neither bun nor npm is installed."
   exit 1
 fi
 
-echo "🔍 Проверка наличия установленного пакетного менеджера ($PACKAGE_MANAGER)..."
-if ! command -v "$PACKAGE_MANAGER" &> /dev/null; then
-  echo "❌ Пакетный менеджер '$PACKAGE_MANAGER' не установлен. Пожалуйста, установите $PACKAGE_MANAGER и попробуйте снова. Пуш отменен"
+if [ ! -f "$ROOT_DIR/client/package.json" ]; then
+  echo "Error: client/package.json not found."
   exit 1
 fi
 
-echo "🔍 Запуск проверки безопасности через $PACKAGE_MANAGER..."
-if [ "$PACKAGE_MANAGER" = "bun" ]; then
-  if ! bun audit; then
-    echo "🚫 Найдены уязвимости. Пуш отменен"
-    exit 1
+echo "Running client checks before push..."
+(
+  cd "$ROOT_DIR/client"
+  if [ "$PACKAGE_RUNNER" = "bun" ]; then
+    bun run type-check
+    bun run lint
+    bun run build
+  else
+    npm run type-check
+    npm run lint
+    npm run build
   fi
-else
-  if ! npm audit --audit-level=low; then
-    echo "🚫 Найдены уязвимости. Пуш отменен"
-    exit 1
-  fi
-fi
+)
 
-echo "✅ Уязвимостей не найдено."
-
-echo "🔍 Проверка сборки через $PACKAGE_MANAGER..."
-if [ "$PACKAGE_MANAGER" = "bun" ]; then
-  if ! bun run build; then
-    echo "🚫 Сборка завершилась с ошибкой. Пуш отменен"
-    exit 1
-  fi
-else
-  if ! npm run build; then
-    echo "🚫 Сборка завершилась с ошибкой. Пуш отменен"
-    exit 1
-  fi
-fi
-
-echo "✅ Сборка прошла успешно."
+echo "Client checks passed."

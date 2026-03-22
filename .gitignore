@@ -1,14 +1,30 @@
 # dependencies
-/node_modules
+node_modules/
+**/node_modules/
 
-# production
-/dist
+# build outputs
+dist/
+**/dist/
+build/
+**/build/
+.vite/
+**/.vite/
+coverage/
+**/coverage/
 
-# misc
-.DS_Store
+# logs
+*.log
+
+# TypeScript incremental cache
+tsconfig.tsbuildinfo
+**/tsconfig.tsbuildinfo
 
 # env files
-.env*
+.env
+.env.local
+**/.env
+**/.env.local
 
-# IDE
-/.idea
+# system / editor
+.DS_Store
+.idea/
