@@ -1,47 +1,65 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT_DIR=$(git rev-parse --show-toplevel)
+ROOT_DIR="$(git rev-parse --show-toplevel)"
+cd "$ROOT_DIR"
 
-echo "🔍 Переход в корневую директорию репозитория..."
-cd "$ROOT_DIR" || { echo "❌ Не удалось перейти в корневую директорию репозитория" && exit 1; }
+if command -v bun >/dev/null 2>&1; then
+  PACKAGE_RUNNER="bun"
+elif command -v npm >/dev/null 2>&1 && command -v npx >/dev/null 2>&1; then
+  PACKAGE_RUNNER="npm"
+else
+  echo "Error: neither bun nor npm/npx is installed."
+  exit 1
+fi
 
-echo "🔍 Проверка наличия изменений для линтинга..."
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.(js|jsx|ts|tsx)$' || true)
-if [ -z "$STAGED_FILES" ]; then
-  echo "✅ Подходящих изменений нет. Пропуск pre-commit проверок"
+staged_files=()
+staged_files_rel=()
+eslint_files=()
+eslint_files_rel=()
+
+while IFS= read -r -d '' file; do
+  case "$file" in
+    client/*)
+      staged_files+=("$file")
+      staged_files_rel+=("${file#client/}")
+      case "$file" in
+        *.js|*.jsx|*.mjs|*.cjs|*.ts|*.tsx|*.mts|*.cts)
+          eslint_files+=("$file")
+          eslint_files_rel+=("${file#client/}")
+          ;;
+      esac
+      ;;
+  esac
+done < <(git diff --cached --name-only --diff-filter=ACMR -z)
+
+if [ "${#staged_files[@]}" -eq 0 ]; then
+  echo "No staged files in client/. Skipping pre-commit checks."
   exit 0
 fi
 
-echo "🔍 Определение lock-файла пакетного менеджера..."
-if [ -f bun.lock ] || [ -f bun.lockb ]; then
-  PACKAGE_MANAGER="bun"
-elif [ -f package-lock.json ]; then
-  PACKAGE_MANAGER="npm"
-else
-  echo "❌ В корне репозитория не найден поддерживаемый lock-файл (bun.lock, bun.lockb, package-lock.json). Коммит отменен"
-  exit 1
+if [ "${#eslint_files[@]}" -gt 0 ]; then
+  echo "Running ESLint on staged client files..."
+  (
+    cd "$ROOT_DIR/client"
+    if [ "$PACKAGE_RUNNER" = "bun" ]; then
+      bunx eslint "${eslint_files_rel[@]}"
+    else
+      npx --no-install eslint "${eslint_files_rel[@]}"
+    fi
+  )
 fi
 
-echo "🔍 Проверка наличия установленного пакетного менеджера ($PACKAGE_MANAGER)..."
-if ! command -v "$PACKAGE_MANAGER" &> /dev/null; then
-  echo "❌ Пакетный менеджер '$PACKAGE_MANAGER' не установлен. Пожалуйста, установите $PACKAGE_MANAGER и попробуйте снова. Коммит отменен"
-  exit 1
-fi
-
-echo "🔍 Запуск линтинга через $PACKAGE_MANAGER..."
-if [ "$PACKAGE_MANAGER" = "bun" ]; then
-  if ! bun run lint; then
-    echo "🚫 Линтинг завершился с ошибкой. Коммит отменен"
-    exit 1
+echo "Running Prettier check on staged client files..."
+(
+  cd "$ROOT_DIR/client"
+  if [ "$PACKAGE_RUNNER" = "bun" ]; then
+    bunx prettier --check --ignore-unknown "${staged_files_rel[@]}"
+  else
+    npx --no-install prettier --check --ignore-unknown "${staged_files_rel[@]}"
   fi
-else
-  if ! npm run lint; then
-    echo "🚫 Линтинг завершился с ошибкой. Коммит отменен"
-    exit 1
-  fi
-fi
+)
 
-echo "✅ Линтинг пройден."
+echo "Pre-commit checks passed."
 
 

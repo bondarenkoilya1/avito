@@ -1,26 +1,54 @@
-name: CI/CD Pipeline
-run-name: "🚀 Запуск workflow от @${{ github.actor }}"
+name: Client CI
 
-on: [push]
+on:
+  push:
+    branches: [main]
+    paths:
+      - "client/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "client/**"
 
 jobs:
-  init:
-    name: Проверки проекта
+  client-ci:
+    name: Client / ${{ matrix.name }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: lint
+            command: lint
+          - name: type-check
+            command: type-check
+          - name: build
+            command: build
+    defaults:
+      run:
+        working-directory: client
     steps:
-      - name: Получение кода
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Подготовка Bun
-        uses: oven-sh/setup-bun@v1
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          bun-version: latest
+          bun-version: "1.2.22"
 
-      - name: Установка зависимостей
-        run: bun install
+      - name: Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.bun/install/cache
+            client/node_modules
+          key: ${{ runner.os }}-bun-client-${{ hashFiles('client/bun.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-client-
 
-      - name: Проверка сборки
-        run: bun run build
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
 
-      - name: Проверка линтинга
-        run: bun run lint
+      - name: Run ${{ matrix.command }}
+        run: bun run ${{ matrix.command }}
+

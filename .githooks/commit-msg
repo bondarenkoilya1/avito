@@ -1,20 +1,21 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-COMMIT_MSG_FILE="${1:-}"
+commit_msg_file="${1:-}"
 
-if [ -z "$COMMIT_MSG_FILE" ] || [ ! -f "$COMMIT_MSG_FILE" ]; then
-  echo "❌ Ошибка: не удалось прочитать сообщение коммита"
+if [ -z "$commit_msg_file" ] || [ ! -f "$commit_msg_file" ]; then
+  echo "Error: commit-msg hook did not receive a valid commit message file."
   exit 1
 fi
 
-COMMIT_SUBJECT=$(grep -vE '^\s*#' "$COMMIT_MSG_FILE" | sed -E '/^\s*$/d' | head -n 1)
-PATTERN='^(feat|fix|refactor|hotfix|docs):\ .+'
+commit_subject="$(grep -vE '^\s*#' "$commit_msg_file" | sed -E '/^\s*$/d' | head -n 1)"
+pattern='^(feat|fix|chore|refactor|test|docs|style)(\([^)]+\))?: .+'
 
-if ! printf '%s\n' "$COMMIT_SUBJECT" | grep -Eq "$PATTERN"; then
-  echo "🚫 Неверный формат сообщения коммита"
-  echo "Ожидаемый формат: feat|fix|refactor|hotfix|docs: сообщение"
-  echo "Пример: feat: add user profile page"
+if ! printf '%s\n' "$commit_subject" | grep -Eq "$pattern"; then
+  echo "Invalid commit message format."
+  echo "Expected: type(scope): description"
+  echo "Allowed types: feat, fix, chore, refactor, test, docs, style"
+  echo "Example: feat(auth): add refresh-token flow"
   exit 1
 fi
 
