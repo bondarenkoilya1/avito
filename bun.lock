@@ -3,7 +3,7 @@
   "workspaces": {
     "": {
       "devDependencies": {
-        "concurrently": "latest",
+        "concurrently": "^9.2.1",
       },
     },
   },
