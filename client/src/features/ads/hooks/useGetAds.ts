@@ -1,30 +1,22 @@
-import type { AdCardType } from "@/features/ads/components";
-
-import { api } from "@/shared/api";
+import { getAds } from "@/features/ads/api/getAds";
+import type { AdsResponse } from "@/features/ads/types";
+import type { GetAdsParams } from "@/features/ads/types/api.types";
 
 import { useQuery } from "@tanstack/react-query";
 
-type AdsType = {
-  items: AdCardType[];
-  total: number;
+type UseGetAdsReturnType = AdsResponse & {
+  isLoading: boolean;
 };
 
-const getAds = async (): Promise<AdsType> => {
-  const ads = await api.get("/items");
-  return ads.data;
-};
-
-export const useGetAds = (): AdsType => {
-  const { data } = useQuery({
-    queryKey: ["ads"],
-    queryFn: getAds
+export const useGetAds = (params: GetAdsParams): UseGetAdsReturnType => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["ads", params],
+    queryFn: () => getAds(params)
   });
 
-  const ads = data?.items || [];
-  const totalAds = data?.total || 0;
-
   return {
-    items: ads,
-    total: totalAds
+    items: data?.items ?? [],
+    total: data?.total ?? 0,
+    isLoading
   };
 };
