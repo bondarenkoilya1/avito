@@ -2,19 +2,21 @@ import { type JSX, useCallback, useMemo, useState } from "react";
 import { Flex, Space, Typography } from "antd";
 
 import {
-  AdCard,
   type AdsSortValue,
   DEFAULT_ADS_SORT,
   Filter,
   PaginationComponent,
   Toolbar
 } from "@/features/ads/components";
+import { AdCardList } from "@/features/ads/components/ad-card-list";
 import { type FilterCategory } from "@/features/ads/components/filter/filter.constants";
 import { ADS_PLURAL_VARIANTS } from "@/features/ads/constants";
 import { useGetAds } from "@/features/ads/hooks";
 import { formatAdsCount } from "@/features/ads/utils";
 
 import { Container } from "@/shared/ui";
+
+import css from "./ads-list-page.module.css";
 
 const ADS_PAGE_SIZE = 10;
 
@@ -71,14 +73,14 @@ export const AdsListPage = (): JSX.Element => {
     <Container>
       <Flex vertical gap={16}>
         <Space orientation="vertical" size={4}>
-          <Typography.Title level={3} style={{ marginBottom: 0 }}>
+          <Typography.Title level={3} className={css.title}>
             Мои объявления
           </Typography.Title>
           <Typography.Text>{formatAdsCount(ADS_PLURAL_VARIANTS, total)}</Typography.Text>
         </Space>
 
-        <Flex align="stretch" gap={48} style={{ flex: 1, minHeight: 0 }}>
-          <aside style={{ flex: "0 0 256px" }}>
+        <Flex align="stretch" gap={48} className={css.contentWrapper}>
+          <aside className={css.filterWrapper}>
             <Filter
               selectedCategories={selectedCategories}
               needsRevisionOnly={needsRevisionOnly}
@@ -88,30 +90,12 @@ export const AdsListPage = (): JSX.Element => {
             />
           </aside>
 
-          <Flex vertical gap={16} style={{ flex: 1, minWidth: 0, minHeight: 0 }}>
+          <Flex vertical gap={16} className={css.sectionWrapper}>
             <Toolbar sortValue={sortValue} onSortChange={handleSortChange} />
 
-            <div
-              style={{
-                display: "grid",
-                gap: 16,
-                gridTemplateColumns: "repeat(5, minmax(0, 1fr))"
-              }}>
-              {paginatedAds.map((ad) => (
-                <AdCard
-                  /* Здесь API не отправляет ID объявления и я предпочел точечно использовать .title для ключа.
-                     (Что вообще не является адекватной практикой)
-                     Я считаю хорошим тоном будет обсудить этот вопрос с бэкенд разработчиком для получения ID с сервера */
-                  key={ad.title}
-                  title={ad.title}
-                  price={ad.price}
-                  category={ad.category}
-                  needsRevision={ad.needsRevision}
-                />
-              ))}
-            </div>
+            <AdCardList ads={paginatedAds} />
 
-            <div style={{ marginTop: "auto" }}>
+            <div className={css.pagination}>
               <PaginationComponent
                 current={currentPage}
                 pageSize={ADS_PAGE_SIZE}

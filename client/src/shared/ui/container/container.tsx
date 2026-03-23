@@ -1,12 +1,11 @@
-import type { CSSProperties, JSX, ReactNode } from "react";
+import type { JSX, ReactNode } from "react";
+
+import css from "./container.module.css";
 
 type ContainerProps = {
   children: ReactNode;
-  style?: CSSProperties;
 };
 
-export const Container = ({ children, style }: ContainerProps): JSX.Element => {
-  return (
-    <div style={{ width: "100%", maxWidth: 1280, margin: "0 auto", ...style }}>{children}</div>
-  );
+export const Container = ({ children }: ContainerProps): JSX.Element => {
+  return <div className={css.container}>{children}</div>;
 };

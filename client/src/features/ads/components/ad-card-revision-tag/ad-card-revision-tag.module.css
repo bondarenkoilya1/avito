@@ -1,0 +1,19 @@
+.tag {
+  margin: 0;
+  width: fit-content;
+  border-radius: 6px;
+  border: none;
+  background-color: #fff7e6;
+  color: #d46b08;
+  font-size: 12px;
+  line-height: 18px;
+  padding: 4px 10px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #fa8c16;
+  display: inline-block;
+}

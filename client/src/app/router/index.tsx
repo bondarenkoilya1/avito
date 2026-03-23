@@ -5,7 +5,7 @@ import { App } from "@/app/app";
 
 import { AdDetailsPage, AdEditPage, AdsListPage } from "@/features/ads/pages";
 
-import { NotFoundPage } from "@/shared/pages/not-found-page";
+import { NotFoundPage } from "@/shared/pages/not-found-page/not-found-page";
 
 export const Router = (): JSX.Element => {
   return (

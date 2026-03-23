@@ -13,6 +13,7 @@ type FilterProps = {
   onNeedsRevisionOnlyChange: (value: boolean) => void;
   onReset: () => void;
 };
+import css from "./filter.module.css";
 
 export const Filter = ({
   selectedCategories,
@@ -24,7 +25,7 @@ export const Filter = ({
   const hasActiveFilters = selectedCategories.length > 0 || needsRevisionOnly;
 
   return (
-    <Space orientation="vertical" style={{ width: 256 }}>
+    <Space orientation="vertical" className={css.wrapper}>
       <Collapse
         bordered
         defaultActiveKey={["categories"]}
@@ -39,17 +40,10 @@ export const Filter = ({
                   options={FILTER_CATEGORIES}
                   value={selectedCategories}
                   onChange={onSelectedCategoriesChange}
-                  style={{ display: "flex", flexDirection: "column", gap: 8 }}
+                  className={css.options}
                 />
-                <Divider style={{ margin: "8px 0" }} />
-                <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    cursor: "pointer",
-                    userSelect: "none"
-                  }}>
+                <Divider className={css.divider} />
+                <label className={css.label}>
                   <Typography.Text>Только требующие доработок</Typography.Text>
                   <Switch checked={needsRevisionOnly} onChange={onNeedsRevisionOnlyChange} />
                 </label>

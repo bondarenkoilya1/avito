@@ -1,11 +1,11 @@
-import type { AdCardProps } from "@/features/ads/components";
+import type { AdCardType } from "@/features/ads/components";
 
 import { api } from "@/shared/api";
 
 import { useQuery } from "@tanstack/react-query";
 
 type AdsType = {
-  items: AdCardProps[];
+  items: AdCardType[];
   total: number;
 };
 
