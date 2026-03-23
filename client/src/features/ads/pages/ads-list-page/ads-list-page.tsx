@@ -2,11 +2,11 @@ import { type JSX, useEffect } from "react";
 import { Flex, Space, Typography } from "antd";
 import { useSearchParams } from "react-router-dom";
 
-import { Filter, PaginationComponent, Toolbar } from "@/features/ads/components";
+import { DEFAULT_ADS_SORT, Filter, PaginationComponent, Toolbar } from "@/features/ads/components";
 import { AdCardList } from "@/features/ads/components/ad-card-list";
 import { ADS_PLURAL_VARIANTS } from "@/features/ads/constants";
 import { useGetAds } from "@/features/ads/hooks";
-import type { AdCategory } from "@/features/ads/types";
+import type { AdCategory, AdsSortValue } from "@/features/ads/types";
 import { formatAdsCount } from "@/features/ads/utils";
 
 import { Container } from "@/shared/ui";
@@ -21,13 +21,15 @@ export const AdsListPage = (): JSX.Element => {
   const searchValue = searchParams.get("q") ?? "";
   const categories = (searchParams.get("categories")?.split(",") ?? []) as AdCategory[];
   const needsRevision = searchParams.get("needsRevision") === "true";
+  const sortValue = (searchParams.get("sort") ?? DEFAULT_ADS_SORT) as AdsSortValue;
 
   const { items, total, isLoading } = useGetAds({
     q: searchValue,
     page,
     pageSize,
     categories,
-    needsRevision
+    needsRevision,
+    sort: sortValue
   });
 
   const setPage = (newPage: number): void =>
@@ -55,7 +57,7 @@ export const AdsListPage = (): JSX.Element => {
       return prev;
     });
 
-  const handleNeedsRevisionChange = (): void =>
+  const changeNeedsRevision = (): void =>
     setSearchParams((prev) => {
       if (needsRevision) {
         prev.delete("needsRevision");
@@ -66,10 +68,17 @@ export const AdsListPage = (): JSX.Element => {
       return prev;
     });
 
-  const handleReset = (): void =>
+  const resetSearch = (): void =>
     setSearchParams((prev) => {
       prev.delete("categories");
       prev.delete("needsRevision");
+      prev.set("page", "1");
+      return prev;
+    });
+
+  const changeSort = (value: AdsSortValue): void =>
+    setSearchParams((prev) => {
+      prev.set("sort", value);
       prev.set("page", "1");
       return prev;
     });
@@ -103,13 +112,18 @@ export const AdsListPage = (): JSX.Element => {
               selectedCategories={categories}
               needsRevision={needsRevision}
               onCategoriesChange={changeCategories}
-              onNeedsRevisionChange={handleNeedsRevisionChange}
-              onReset={handleReset}
+              onNeedsRevisionChange={changeNeedsRevision}
+              onReset={resetSearch}
             />
           </aside>
 
           <Flex vertical gap={16} className={css.sectionWrapper}>
-            <Toolbar defaultSearchValue={searchValue} onSearch={search} />
+            <Toolbar
+              defaultSearchValue={searchValue}
+              onSearch={search}
+              sortValue={sortValue}
+              onSortChange={changeSort}
+            />
 
             <AdCardList ads={items} isLoading={isLoading} />
 

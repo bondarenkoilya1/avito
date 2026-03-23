@@ -1,3 +1,5 @@
+import type { AdsSortValue } from "@/features/ads/types/sort.types";
+
 import type { AdCardType, AdCategory } from "./ad.types";
 
 export type AdsResponse = {
@@ -11,4 +13,5 @@ export type GetAdsParams = {
   categories?: AdCategory[];
   needsRevision: boolean;
   q?: string;
+  sort: AdsSortValue;
 };
