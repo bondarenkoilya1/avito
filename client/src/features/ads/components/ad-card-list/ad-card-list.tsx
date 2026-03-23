@@ -1,6 +1,7 @@
 import type { JSX } from "react";
 
-import { AdCard, type AdCardType } from "@/features/ads/components";
+import { AdCard } from "@/features/ads/components";
+import type { AdCardType } from "@/features/ads/types";
 
 import css from "./ad-card-list.module.css";
 

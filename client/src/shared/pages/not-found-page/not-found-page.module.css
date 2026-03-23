@@ -1,6 +1,6 @@
 .wrapper {
-  min-height: 100dvh;
   gap: 48px;
+  min-height: 100dvh;
 }
 
 .title {

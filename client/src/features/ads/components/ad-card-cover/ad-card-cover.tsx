@@ -1,8 +1,8 @@
 import { Flex, Tag } from "antd";
 import type { JSX } from "react";
 
-import type { AdCategory } from "@/features/ads/components/ad-card/ad-card.types";
 import { getCategoryLabel } from "@/features/ads/components/ad-card/ad-card.utils";
+import type { AdCategory } from "@/features/ads/types";
 
 import css from "./ad-card-cover.module.css";
 
