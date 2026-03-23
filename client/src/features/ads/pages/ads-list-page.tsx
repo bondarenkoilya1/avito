@@ -1,31 +1,20 @@
 import { type JSX, useCallback, useMemo, useState } from "react";
 import { Flex, Space, Typography } from "antd";
 
-import { AdCard, type AdCardProps, Filter, PaginationComponent } from "@/features/ads/components";
-import { MOCK_ADS } from "@/features/ads/components/ad-card/ad-card.constans";
+import {
+  AdCard,
+  type AdsSortValue,
+  DEFAULT_ADS_SORT,
+  Filter,
+  PaginationComponent,
+  Toolbar
+} from "@/features/ads/components";
 import { type FilterCategory } from "@/features/ads/components/filter/filter.constants";
-import { type AdsSortValue, DEFAULT_ADS_SORT, Toolbar } from "@/features/ads/components/toolbar";
+import { ADS_PLURAL_VARIANTS } from "@/features/ads/constants";
+import { useGetAds } from "@/features/ads/hooks";
+import { formatAdsCount } from "@/features/ads/utils";
 
-import { api } from "@/shared/api";
-import { pluralize, type PluralizeVariants } from "@/shared/lib";
 import { Container } from "@/shared/ui";
-
-import { useQuery } from "@tanstack/react-query";
-
-const ADS_PLURAL_VARIANTS: PluralizeVariants = {
-  one: "объявление",
-  few: "объявления",
-  many: "объявлений",
-  other: "объявления"
-};
-
-type ItemsGetOut = {
-  items: AdCardProps[];
-  total: number;
-};
-
-const formatAdsNumber = (variants: PluralizeVariants, number: number): string =>
-  number ? `${number} ${pluralize(variants, number)}` : "Объявлений не найдено";
 
 const ADS_PAGE_SIZE = 10;
 
@@ -34,18 +23,18 @@ export const AdsListPage = (): JSX.Element => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategories, setSelectedCategories] = useState<FilterCategory[]>([]);
   const [needsRevisionOnly, setNeedsRevisionOnly] = useState(false);
+  const { items, total } = useGetAds();
 
+  // todo: refactor pagination system, now return only 10 elements
   const filteredAds = useMemo(() => {
-    return MOCK_ADS.filter((ad) => {
+    return items.filter((ad) => {
       const categoryMatched =
         selectedCategories.length === 0 || selectedCategories.includes(ad.category);
       const needsRevisionMatched = !needsRevisionOnly || Boolean(ad.needsRevision);
 
       return categoryMatched && needsRevisionMatched;
     });
-  }, [selectedCategories, needsRevisionOnly]);
-
-  const totalAds = filteredAds.length;
+  }, [items, selectedCategories, needsRevisionOnly]);
 
   const paginatedAds = useMemo(() => {
     const start = (currentPage - 1) * ADS_PAGE_SIZE;
@@ -78,16 +67,6 @@ export const AdsListPage = (): JSX.Element => {
     setCurrentPage(1);
   }, []);
 
-  const getCards = async (): Promise<ItemsGetOut> => {
-    const cards = await api.get("/items");
-    return cards.data;
-  };
-
-  const { data } = useQuery({
-    queryKey: ["cards"],
-    queryFn: getCards
-  });
-
   return (
     <Container>
       <Flex vertical gap={16}>
@@ -95,9 +74,7 @@ export const AdsListPage = (): JSX.Element => {
           <Typography.Title level={3} style={{ marginBottom: 0 }}>
             Мои объявления
           </Typography.Title>
-          <Typography.Text>
-            {formatAdsNumber(ADS_PLURAL_VARIANTS, data?.total || 0)}
-          </Typography.Text>
+          <Typography.Text>{formatAdsCount(ADS_PLURAL_VARIANTS, total)}</Typography.Text>
         </Space>
 
         <Flex align="stretch" gap={48} style={{ flex: 1, minHeight: 0 }}>
@@ -120,13 +97,16 @@ export const AdsListPage = (): JSX.Element => {
                 gap: 16,
                 gridTemplateColumns: "repeat(5, minmax(0, 1fr))"
               }}>
-              {paginatedAds.map((card) => (
+              {paginatedAds.map((ad) => (
                 <AdCard
-                  key={card.id}
-                  title={card.title}
-                  price={card.price}
-                  category={card.category}
-                  needsRevision={card.needsRevision}
+                  /* Здесь API не отправляет ID объявления и я предпочел точечно использовать .title для ключа.
+                     (Что вообще не является адекватной практикой)
+                     Я считаю хорошим тоном будет обсудить этот вопрос с бэкенд разработчиком для получения ID с сервера */
+                  key={ad.title}
+                  title={ad.title}
+                  price={ad.price}
+                  category={ad.category}
+                  needsRevision={ad.needsRevision}
                 />
               ))}
             </div>
@@ -135,7 +115,7 @@ export const AdsListPage = (): JSX.Element => {
               <PaginationComponent
                 current={currentPage}
                 pageSize={ADS_PAGE_SIZE}
-                total={totalAds}
+                total={total}
                 onChange={handlePageChange}
               />
             </div>
