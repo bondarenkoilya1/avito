@@ -1,12 +1,10 @@
-import { type JSX, useEffect } from "react";
+import { type JSX } from "react";
 import { Flex, Space, Typography } from "antd";
-import { useSearchParams } from "react-router-dom";
 
-import { DEFAULT_ADS_SORT, Filter, PaginationComponent, Toolbar } from "@/features/ads/components";
+import { Filter, PaginationComponent, Toolbar } from "@/features/ads/components";
 import { AdCardList } from "@/features/ads/components/ad-card-list";
 import { ADS_PLURAL_VARIANTS } from "@/features/ads/constants";
-import { useGetAds } from "@/features/ads/hooks";
-import type { AdCategory, AdsSortValue } from "@/features/ads/types";
+import { useAdsFilters } from "@/features/ads/hooks";
 import { formatAdsCount } from "@/features/ads/utils";
 
 import { Container } from "@/shared/ui";
@@ -16,81 +14,22 @@ import css from "./ads-list-page.module.css";
 const pageSize = 10;
 
 export const AdsListPage = (): JSX.Element => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const page = Number(searchParams.get("page") ?? 1);
-  const searchValue = searchParams.get("q") ?? "";
-  const categories = (searchParams.get("categories")?.split(",") ?? []) as AdCategory[];
-  const needsRevision = searchParams.get("needsRevision") === "true";
-  const sortValue = (searchParams.get("sort") ?? DEFAULT_ADS_SORT) as AdsSortValue;
-
-  const { items, total, isLoading } = useGetAds({
-    q: searchValue,
+  const {
+    items,
+    total,
+    isLoading,
     page,
-    pageSize,
+    searchValue,
     categories,
     needsRevision,
-    sort: sortValue
-  });
-
-  const setPage = (newPage: number): void =>
-    setSearchParams((prev) => {
-      prev.set("page", String(newPage));
-      return prev;
-    });
-
-  const search = (value: string): void => {
-    setSearchParams((prev) => {
-      prev.set("q", value);
-      prev.set("page", "1");
-      return prev;
-    });
-  };
-
-  const changeCategories = (values: AdCategory[]): void =>
-    setSearchParams((prev) => {
-      if (values.length) {
-        prev.set("categories", values.join(","));
-      } else {
-        prev.delete("categories");
-      }
-      prev.set("page", "1");
-      return prev;
-    });
-
-  const changeNeedsRevision = (): void =>
-    setSearchParams((prev) => {
-      if (needsRevision) {
-        prev.delete("needsRevision");
-      } else {
-        prev.set("needsRevision", "true");
-      }
-      prev.set("page", "1");
-      return prev;
-    });
-
-  const resetSearch = (): void =>
-    setSearchParams((prev) => {
-      prev.delete("categories");
-      prev.delete("needsRevision");
-      prev.set("page", "1");
-      return prev;
-    });
-
-  const changeSort = (value: AdsSortValue): void =>
-    setSearchParams((prev) => {
-      prev.set("sort", value);
-      prev.set("page", "1");
-      return prev;
-    });
-
-  useEffect(
-    () => {
-      if (!isLoading && items.length === 0 && page > 1) {
-        setPage(1);
-      }
-    }, // eslint-disable-next-line
-    [isLoading, items.length, page]
-  );
+    sortValue,
+    setPage,
+    search,
+    changeCategories,
+    changeNeedsRevision,
+    resetSearch,
+    sort
+  } = useAdsFilters(pageSize);
 
   return (
     <Container>
@@ -122,7 +61,7 @@ export const AdsListPage = (): JSX.Element => {
               defaultSearchValue={searchValue}
               onSearch={search}
               sortValue={sortValue}
-              onSortChange={changeSort}
+              onSortChange={sort}
             />
 
             <AdCardList ads={items} isLoading={isLoading} />
