@@ -1,0 +1,8 @@
+.wrapper {
+  gap: 48px;
+  min-height: 100dvh;
+}
+
+.title {
+  margin: 0;
+}

@@ -1,10 +1,8 @@
-import type { AdCategory } from "@/features/ads/components/ad-card";
+import type { AdCategory } from "@/features/ads/types";
 
-export type FilterCategory = AdCategory;
-
-type FilterCategoryOption = {
+export type FilterCategoryOption = {
   label: string;
-  value: FilterCategory;
+  value: AdCategory;
 };
 
 // todo: temporarily until api integration

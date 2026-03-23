@@ -1,0 +1,22 @@
+.filterWrapper {
+  flex: 0 0 256px;
+}
+
+.title {
+  margin-bottom: 0;
+}
+
+.contentWrapper {
+  flex: 1;
+  min-height: 0;
+}
+
+.sectionWrapper {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+.pagination {
+  margin-top: auto;
+}

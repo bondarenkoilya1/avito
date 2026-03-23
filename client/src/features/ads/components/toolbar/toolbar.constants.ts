@@ -1,12 +1,7 @@
 import type { SelectProps } from "antd";
 
-export type AdsSortValue =
-  | "title_asc"
-  | "title_desc"
-  | "created_at_desc"
-  | "created_at_asc"
-  | "price_asc"
-  | "price_desc";
+import type { AdsSortValue } from "@/features/ads/types";
+export type { AdsSortValue } from "@/features/ads/types";
 
 export const DEFAULT_ADS_SORT: AdsSortValue = "created_at_desc";
 

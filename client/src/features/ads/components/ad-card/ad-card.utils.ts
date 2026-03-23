@@ -1,4 +1,4 @@
-import type { AdCategory } from "@/features/ads/components/ad-card/ad-card.types";
+import type { AdCategory } from "@/features/ads/types";
 
 const CATEGORY_LABELS: Record<AdCategory, string> = {
   auto: "Авто",
