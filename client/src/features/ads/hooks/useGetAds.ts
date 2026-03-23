@@ -1,4 +1,4 @@
-import { getAds } from "@/features/ads/api/getAds";
+import { getAds } from "@/features/ads/api";
 import type { AdsResponse } from "@/features/ads/types";
 import type { GetAdsParams } from "@/features/ads/types/api.types";
 
