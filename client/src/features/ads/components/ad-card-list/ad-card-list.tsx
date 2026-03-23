@@ -1,3 +1,4 @@
+import { Card, Skeleton } from "antd";
 import type { JSX } from "react";
 
 import { AdCard } from "@/features/ads/components";
@@ -7,11 +8,24 @@ import css from "./ad-card-list.module.css";
 
 type AdCardListProps = {
   ads: AdCardType[];
+  isLoading: boolean;
 };
 
-export const AdCardList = ({ ads }: AdCardListProps): JSX.Element => {
+export const AdCardList = ({ ads, isLoading }: AdCardListProps): JSX.Element => {
+  if (isLoading) {
+    return (
+      <ul className={css.list}>
+        {Array.from({ length: 10 }).map((_, index) => (
+          <Card key={index} className={css.card}>
+            <Skeleton active />
+          </Card>
+        ))}
+      </ul>
+    );
+  }
+
   return (
-    <div className={css.list}>
+    <ul className={css.list}>
       {ads.map((ad) => (
         <AdCard
           /* Изначально API не отправлял ID объявления. Я добавил это поле в DTO,
@@ -21,6 +35,6 @@ export const AdCardList = ({ ads }: AdCardListProps): JSX.Element => {
           ad={ad}
         />
       ))}
-    </div>
+    </ul>
   );
 };

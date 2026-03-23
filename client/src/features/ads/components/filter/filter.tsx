@@ -1,18 +1,27 @@
 import { type JSX } from "react";
 import { Button, Collapse, Space } from "antd";
 
-import { useFilterActions, useOnlyNeedsRevisionStatus, useSelectedCategories } from "@/app/store";
-
 import { FilterItems } from "@/features/ads/components";
+import type { AdCategory } from "@/features/ads/types";
 
 import css from "./filter.module.css";
 
-export const Filter = (): JSX.Element => {
-  const selectedCategories = useSelectedCategories();
-  const showOnlyNeedsRevision = useOnlyNeedsRevisionStatus();
-  const { resetCategories } = useFilterActions();
+type FilterProps = {
+  selectedCategories: AdCategory[];
+  needsRevision: boolean;
+  onCategoriesChange: (categories: AdCategory[]) => void;
+  onNeedsRevisionChange: () => void;
+  onReset: () => void;
+};
 
-  const hasActiveFilters = selectedCategories.length > 0 || showOnlyNeedsRevision;
+export const Filter = ({
+  selectedCategories,
+  needsRevision,
+  onCategoriesChange,
+  onNeedsRevisionChange,
+  onReset
+}: FilterProps): JSX.Element => {
+  const hasActiveFilters = selectedCategories.length > 0 || needsRevision;
 
   return (
     <Space orientation="vertical" className={css.wrapper}>
@@ -20,9 +29,22 @@ export const Filter = (): JSX.Element => {
         bordered
         defaultActiveKey={["categories"]}
         expandIconPlacement="end"
-        items={[{ key: "categories", label: "Категория", children: <FilterItems /> }]}
+        items={[
+          {
+            key: "categories",
+            label: "Категория",
+            children: (
+              <FilterItems
+                selectedCategories={selectedCategories}
+                needsRevision={needsRevision}
+                onCategoriesChange={onCategoriesChange}
+                onNeedsRevisionChange={onNeedsRevisionChange}
+              />
+            )
+          }
+        ]}
       />
-      <Button block onClick={resetCategories} disabled={!hasActiveFilters}>
+      <Button block onClick={onReset} disabled={!hasActiveFilters}>
         Сбросить фильтры
       </Button>
     </Space>

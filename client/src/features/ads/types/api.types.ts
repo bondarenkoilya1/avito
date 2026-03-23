@@ -10,4 +10,5 @@ export type GetAdsParams = {
   pageSize: number;
   categories?: AdCategory[];
   needsRevision: boolean;
+  q?: string;
 };
