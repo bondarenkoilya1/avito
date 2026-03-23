@@ -1,5 +1,14 @@
 # Avito. Тестовое задание. Весна 2026
 
+## Клонирование
+```bash
+git clone https://github.com/bondarenkoilya1/avito.git
+# или по SSH
+git clone git@github.com:bondarenkoilya1/avito.git
+
+cd avito
+```
+
 ## Запуск
 
 ### Через Docker
@@ -7,10 +16,12 @@
 1. Установите [Docker](https://docs.docker.com/get-started/get-docker/)
 2. В корне проекта выполните:
 ```bash
-   docker compose up --build
+docker compose up --build
 ```
 3. Клиент: http://localhost:5173
 4. Сервер: http://localhost:5555
+
+> Зависимости устанавливаются автоматически внутри контейнеров
 
 ### Локально
 
@@ -28,11 +39,11 @@ bun install
 bun run dev
 ```
 
-
 Создайте `server/.env`:
 ```
 PORT=5555
 ```
+
 Создайте `client/.env`:
 ```
 VITE_API_URL=http://localhost:5555
