@@ -59,4 +59,5 @@ VITE_API_URL=http://localhost:5555
 
 ---
 > [!TIP]
-> Я разбивал проект на маленькие задачи и планировал с помощью доски от GitHub. Посмотреть на нее можете по [ссылке](https://github.com/users/bondarenkoilya1/projects/7)
+> Я разбивал проект на маленькие задачи и планировал с помощью доски от GitHub. <br>
+> Посмотреть на нее можете по [ссылке](https://github.com/users/bondarenkoilya1/projects/7)
