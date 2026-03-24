@@ -9,8 +9,13 @@ export const generateResponse = async (
   payload: GenerateRequestType
 ): Promise<SimplifiedGenerateResponseType> => {
   const { data } = await api.post<GenerateResponseType>("/generate", {
-    ...payload,
-    stream: false
+    model: payload.model,
+    prompt: payload.prompt,
+    stream: false,
+    options: {
+      temperature: 0.1,
+      num_predict: 300
+    }
   });
 
   return data.response;
