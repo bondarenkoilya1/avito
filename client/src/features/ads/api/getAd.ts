@@ -1,6 +1,5 @@
+import { api } from "@/features/ads/api";
 import type { AdType } from "@/features/ads/types/ad.types";
-
-import { api } from "@/shared/api";
 
 export type AdResponse = AdType & { needsRevision: boolean };
 
