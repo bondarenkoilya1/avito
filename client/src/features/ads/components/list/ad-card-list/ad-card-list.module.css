@@ -2,7 +2,14 @@
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 16px;
+
   padding-left: 0;
+
+  list-style: none;
+}
+
+.list > li {
+  display: flex;
 }
 
 .card {
