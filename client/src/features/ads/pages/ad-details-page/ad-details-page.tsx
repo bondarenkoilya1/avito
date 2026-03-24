@@ -10,11 +10,11 @@ import {
   AdSpecifications
 } from "@/features/ads/components";
 import { getCategoryLabel } from "@/features/ads/constants";
-import { useGetAd } from "@/features/ads/hooks/useGetAd";
+import { useGetAd } from "@/features/ads/hooks";
 import { AdDetailsSkeleton } from "@/features/ads/pages/ad-details-page/ad-details-skeleton";
-import { formatDate } from "@/features/ads/pages/ad-details-page/lib/formatDate";
-import { formatPrice } from "@/features/ads/pages/ad-details-page/lib/formatPrice";
-import { getMissingFields } from "@/features/ads/pages/ad-details-page/lib/getMissingFields";
+import { formatDate } from "@/features/ads/pages/ad-details-page/lib/format-date";
+import { formatPrice } from "@/features/ads/pages/ad-details-page/lib/format-price";
+import { getMissingFields } from "@/features/ads/pages/ad-details-page/lib/get-missing-fields";
 
 import css from "./ad-details-page.module.css";
 

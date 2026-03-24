@@ -1,3 +1,3 @@
 export * from "./instance";
-export * from "./getAds";
-export * from "./getAd";
+export * from "./get-ad";
+export * from "./get-ads";

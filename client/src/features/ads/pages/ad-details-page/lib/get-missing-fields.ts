@@ -1,4 +1,4 @@
-import type { AdResponse } from "@/features/ads/api/getAd";
+import type { AdResponse } from "@/features/ads/api/get-ad";
 import {
   FIELD_LABELS,
   REQUIRED_FIELDS_BY_CATEGORY

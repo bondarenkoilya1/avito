@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import { DEFAULT_ADS_SORT } from "@/features/ads/components";
-import { useGetAds } from "@/features/ads/hooks/useGetAds";
+import { useGetAds } from "@/features/ads/hooks/use-get-ads";
 import type { AdCardType, AdCategory, AdsSortValue } from "@/features/ads/types";
 
 type UseAdsFiltersReturnType = {
