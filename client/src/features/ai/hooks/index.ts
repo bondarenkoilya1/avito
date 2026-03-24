@@ -1,2 +1,2 @@
-export * from "./useGetModels";
-export * from "./useGenerateResponse";
+export * from "./use-get-models";
+export * from "./use-generate-response";
