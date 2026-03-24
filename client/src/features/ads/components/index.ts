@@ -4,6 +4,8 @@ export * from "./ad-description";
 export * from "./ad-card";
 export * from "./ad-card-cover";
 export * from "./ad-card-revision-tag";
+export * from "./ad-revision-alert";
+export * from "./ad-specifications";
 export * from "./filter";
 export * from "./filter-items";
 export * from "./pagination";
