@@ -1,0 +1,8 @@
+.missingList {
+  margin: 4px 0 0;
+  padding-left: 16px;
+}
+
+.missingList li {
+  margin-bottom: 2px;
+}
