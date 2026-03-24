@@ -1,3 +1,6 @@
+export * from "./ad-details-gallery";
+export * from "./ad-details-header";
+export * from "./ad-description";
 export * from "./ad-card";
 export * from "./ad-card-cover";
 export * from "./ad-card-revision-tag";
