@@ -4,4 +4,5 @@ export * from "./ad-card-revision-tag";
 export * from "./filter";
 export * from "./filter-items";
 export * from "./pagination";
+export * from "./placeholder-gallery";
 export * from "./toolbar";
