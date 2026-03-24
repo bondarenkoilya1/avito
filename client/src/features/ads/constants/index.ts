@@ -1,5 +1,7 @@
 import { type PluralizeVariants } from "@/shared/lib";
 
+export * from "./category-labels";
+
 export const ADS_PLURAL_VARIANTS: PluralizeVariants = {
   one: "объявление",
   few: "объявления",
