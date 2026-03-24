@@ -1,1 +1,1 @@
-export * from "./formatAdsCount";
+export * from "./format-ads-count";

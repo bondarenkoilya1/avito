@@ -2,7 +2,7 @@ import { type ReactNode } from "react";
 import type { JSX } from "react";
 
 import { ThemeContext } from "@/shared/contexts";
-import { useTheme } from "@/shared/hooks";
+import { useTheme } from "@/shared/hooks/use-theme";
 
 export const ThemeProvider = ({ children }: { children: ReactNode }): JSX.Element => {
   const value = useTheme();

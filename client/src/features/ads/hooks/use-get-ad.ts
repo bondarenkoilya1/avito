@@ -1,4 +1,4 @@
-import { type AdResponse, getAd } from "@/features/ads/api/getAd";
+import { type AdResponse, getAd } from "@/features/ads/api";
 
 import { useQuery } from "@tanstack/react-query";
 

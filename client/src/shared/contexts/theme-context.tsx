@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 
-import type { useTheme } from "@/shared/hooks/useTheme";
+import type { useTheme } from "@/shared/hooks/use-theme";
 
 export type ThemeContextValue = ReturnType<typeof useTheme>;
 
