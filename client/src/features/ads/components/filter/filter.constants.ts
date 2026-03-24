@@ -1,3 +1,4 @@
+import { getCategoryLabel } from "@/features/ads/constants";
 import type { AdCategory } from "@/features/ads/types";
 
 export type FilterCategoryOption = {
@@ -5,9 +6,9 @@ export type FilterCategoryOption = {
   value: AdCategory;
 };
 
-// todo: temporarily until api integration
-export const FILTER_CATEGORIES: FilterCategoryOption[] = [
-  { label: "Авто", value: "auto" },
-  { label: "Электроника", value: "electronics" },
-  { label: "Недвижимость", value: "real_estate" }
-];
+const FILTER_CATEGORY_ORDER: AdCategory[] = ["auto", "electronics", "real_estate"];
+
+export const FILTER_CATEGORIES: FilterCategoryOption[] = FILTER_CATEGORY_ORDER.map((category) => ({
+  label: getCategoryLabel(category),
+  value: category
+}));
