@@ -1,0 +1,24 @@
+.form {
+  width: 100%;
+}
+
+.divider {
+  margin: 4px 0 20px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionTitle {
+  display: block;
+  margin-bottom: 16px;
+  font-size: 16px;
+}
+
+.charCounter {
+  display: block;
+  margin-top: 4px;
+  text-align: right;
+}
