@@ -2,7 +2,7 @@ import { type JSX } from "react";
 import { Flex, Space, Typography } from "antd";
 
 import { Filter, PaginationComponent, Toolbar } from "@/features/ads/components";
-import { AdCardList } from "@/features/ads/components/ad-card-list";
+import { AdCardList } from "@/features/ads/components/list/ad-card-list";
 import { ADS_PLURAL_VARIANTS } from "@/features/ads/constants";
 import { useAdsFilters } from "@/features/ads/hooks";
 import { formatAdsCount } from "@/features/ads/utils";

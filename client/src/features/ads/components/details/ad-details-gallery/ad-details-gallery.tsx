@@ -1,7 +1,7 @@
 import { Flex } from "antd";
 import type { JSX } from "react";
 
-import { PlaceholderGallery } from "@/features/ads/components/placeholder-gallery";
+import { PlaceholderGallery } from "@/features/ads/components/details/placeholder-gallery";
 
 import css from "./ad-details-gallery.module.css";
 
