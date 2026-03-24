@@ -1,7 +1,7 @@
 import { Checkbox, Divider, Space, Switch, Typography } from "antd";
 import type { JSX } from "react";
 
-import { FILTER_CATEGORIES } from "@/features/ads/components/filter/filter.constants";
+import { FILTER_CATEGORIES } from "@/features/ads/components/list/filter/filter.constants";
 import type { AdCategory } from "@/features/ads/types";
 
 import css from "./filter-items.module.css";

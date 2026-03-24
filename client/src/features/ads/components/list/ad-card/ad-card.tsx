@@ -3,7 +3,7 @@ import type { JSX } from "react";
 import { Link } from "react-router-dom";
 
 import { AdCardCover, AdCardRevisionTag } from "@/features/ads/components";
-import { formatPrice } from "@/features/ads/components/ad-card/ad-card.utils";
+import { formatPrice } from "@/features/ads/components/list/ad-card/ad-card.utils";
 import type { AdCardType } from "@/features/ads/types";
 
 import css from "./ad-card.module.css";
