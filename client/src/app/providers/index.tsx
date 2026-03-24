@@ -1,17 +1,31 @@
-import type { JSX } from "react";
+import { type JSX } from "react";
+import { ConfigProvider, theme } from "antd";
 
+import { QueryProvider } from "@/app/providers/query-provider";
+import { ThemeProvider } from "@/app/providers/theme-provider";
 import { Router } from "@/app/router";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { useThemeContext } from "@/shared/contexts";
 
-const queryClient = new QueryClient();
+const ThemedApp = (): JSX.Element => {
+  const { theme: currentTheme } = useThemeContext();
+
+  return (
+    <ConfigProvider
+      theme={{
+        algorithm: currentTheme === "dark" ? theme.darkAlgorithm : theme.defaultAlgorithm
+      }}>
+      <Router />
+    </ConfigProvider>
+  );
+};
 
 export const Providers = (): JSX.Element => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router />
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    <QueryProvider>
+      <ThemeProvider>
+        <ThemedApp />
+      </ThemeProvider>
+    </QueryProvider>
   );
 };

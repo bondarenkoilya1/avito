@@ -14,12 +14,17 @@ export const AdCard = ({ ad }: AdCardProps): JSX.Element => {
   const { id, title, price, category, needsRevision } = ad;
 
   return (
-    <Link to={`/ads/${id}`}>
+    <Link to={`/ads/${id}`} className={css.cardLink}>
       <Card hoverable className={css.card} cover={<AdCardCover category={category} />}>
-        <Flex vertical gap={4} className={css.flexWrapper}>
-          <Typography.Text strong>{title}</Typography.Text>
-          <Typography.Text strong>{formatPrice(price)}</Typography.Text>
-          {needsRevision && <AdCardRevisionTag />}
+        <Flex vertical className={css.flexWrapper}>
+          <Typography.Text strong className={css.title}>
+            {title}
+          </Typography.Text>
+
+          <div className={css.bottomContent}>
+            <Typography.Text strong>{formatPrice(price)}</Typography.Text>
+            {needsRevision && <AdCardRevisionTag />}
+          </div>
         </Flex>
       </Card>
     </Link>

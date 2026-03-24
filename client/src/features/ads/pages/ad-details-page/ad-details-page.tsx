@@ -81,7 +81,6 @@ export const AdDetailsPage = (): JSX.Element | null => {
           priceLabel={ad.price === null ? null : formatPrice(ad.price)}
           createdAtLabel={formatDate(ad.createdAt)}
           updatedAtLabel={formatDate(ad.updatedAt)}
-          onBack={() => navigate("/ads")}
           onEdit={(id) => navigate(`/ads/${id}/edit`)}
         />
 

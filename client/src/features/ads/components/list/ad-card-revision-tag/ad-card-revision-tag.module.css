@@ -9,7 +9,7 @@
   line-height: 18px;
   color: #d46b08;
 
-  background-color: #fff7e6;
+  background-color: var(--ant-color-warning-bg);
 }
 
 .dot {
