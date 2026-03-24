@@ -5,5 +5,5 @@
 .descriptions {
   padding: 12px;
   border-radius: 8px;
-  background: #fafafa;
+  background: var(--ant-color-bg-layout);
 }

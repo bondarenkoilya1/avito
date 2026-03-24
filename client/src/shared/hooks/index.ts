@@ -1,1 +1,1 @@
-/* Remove when folder won't be empty */
+export * from "./useTheme";

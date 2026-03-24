@@ -1,6 +1,8 @@
 import { type JSX } from "react";
 import { Flex, Space, Typography } from "antd";
 
+import { ThemeToggle } from "@/widgets";
+
 import { Filter, PaginationComponent, Toolbar } from "@/features/ads/components";
 import { AdCardList } from "@/features/ads/components/list/ad-card-list";
 import { ADS_PLURAL_VARIANTS } from "@/features/ads/constants";
@@ -34,16 +36,20 @@ export const AdsListPage = (): JSX.Element => {
   return (
     <Container>
       <Flex vertical gap={16}>
-        <Space orientation="vertical" size={4}>
-          <Typography.Title level={3} className={css.title}>
-            Мои объявления
-          </Typography.Title>
-          {isLoading ? (
-            <Typography.Text>Ищем ваши объявления</Typography.Text>
-          ) : (
-            <Typography.Text>{formatAdsCount(ADS_PLURAL_VARIANTS, total)}</Typography.Text>
-          )}
-        </Space>
+        <Flex justify="space-between" align="center">
+          <Space orientation="vertical" size={4}>
+            <Typography.Title level={3} className={css.title}>
+              Мои объявления
+            </Typography.Title>
+            {isLoading ? (
+              <Typography.Text>Ищем ваши объявления</Typography.Text>
+            ) : (
+              <Typography.Text>{formatAdsCount(ADS_PLURAL_VARIANTS, total)}</Typography.Text>
+            )}
+          </Space>
+
+          <ThemeToggle />
+        </Flex>
 
         <Flex align="stretch" gap={48} className={css.contentWrapper}>
           <aside className={css.filterWrapper}>

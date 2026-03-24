@@ -1,5 +1,7 @@
 import { type JSX } from "react";
-import { Typography } from "antd";
+import { Flex, Typography } from "antd";
+
+import { ThemeToggle } from "@/widgets";
 
 import { AdEditForm } from "@/features/ads/components/edit/ad-edit-form/ad-edit-form";
 
@@ -11,9 +13,12 @@ export const AdEditPage = (): JSX.Element => {
   return (
     <div className={css.page}>
       <div className={css.container}>
-        <Title level={3} className={css.title}>
-          Редактирование объявления
-        </Title>
+        <Flex justify="space-between" align="center">
+          <Title level={3} className={css.title}>
+            Редактирование объявления
+          </Title>
+          <ThemeToggle />
+        </Flex>
         <AdEditForm />
       </div>
     </div>

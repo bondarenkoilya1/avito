@@ -1,5 +1,8 @@
 import { Button, Flex, Typography } from "antd";
 import type { JSX } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { ThemeToggle } from "@/widgets";
 
 import css from "./ad-details-header.module.css";
 
@@ -11,7 +14,6 @@ type AdDetailsHeaderProps = {
   priceLabel: string | null;
   createdAtLabel: string;
   updatedAtLabel: string;
-  onBack: () => void;
   onEdit: (id: number) => void;
 };
 
@@ -21,14 +23,18 @@ export const AdDetailsHeader = ({
   priceLabel,
   createdAtLabel,
   updatedAtLabel,
-  onBack,
   onEdit
 }: AdDetailsHeaderProps): JSX.Element => {
+  const navigate = useNavigate();
+
   return (
     <>
-      <Button type="link" icon={<ArrowLeftOutlined />} onClick={onBack} className={css.backButton}>
-        К списку объявлений
-      </Button>
+      <Flex justify="space-between" align="center">
+        <Button type="link" icon={<ArrowLeftOutlined />} onClick={() => navigate(-1)}>
+          К списку объявлений
+        </Button>
+        <ThemeToggle />
+      </Flex>
 
       <Flex justify="space-between" align="flex-start" className={css.header}>
         <Flex vertical gap={8}>
