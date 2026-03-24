@@ -1,5 +1,10 @@
 # Avito. Тестовое задание. Весна 2026
 
+
+> [!CAUTION]
+> В работе. Планирую закончить по дедлайну - 25 марта включительно.
+
+
 ## Клонирование
 ```bash
 git clone https://github.com/bondarenkoilya1/avito.git
