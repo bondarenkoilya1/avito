@@ -27,13 +27,7 @@ export const AdCardList = ({ ads, isLoading }: AdCardListProps): JSX.Element => 
   return (
     <ul className={css.list}>
       {ads.map((ad) => (
-        <AdCard
-          /* Изначально API не отправлял ID объявления. Я добавил это поле в DTO,
-             чтобы устанавливать нормальные ключи при маппинге. Но в целом,
-             я считаю хорошим тоном будет обсудить этот вопрос с бэкенд разработчиком */
-          key={ad.id}
-          ad={ad}
-        />
+        <AdCard key={ad.id} ad={ad} />
       ))}
     </ul>
   );

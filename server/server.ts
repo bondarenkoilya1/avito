@@ -14,75 +14,61 @@ const fastify = Fastify({
 
 await fastify.register((await import('@fastify/middie')).default);
 
-// Искуственная задержка ответов, чтобы можно было протестировать состояния загрузки
+// Искуственная задержка ответов, чтобы фдожно было протестировать состояния загрузки
 fastify.use((_, __, next) =>
   new Promise(res => setTimeout(res, 300 + Math.random() * 700)).then(next),
 );
 
-// Настройка CORS
-fastify.use((_, reply, next) => {
+// Настройка CORS + Preflight
+fastify.use((req, reply, next) => {
   reply.setHeader('Access-Control-Allow-Origin', '*');
+  reply.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+  reply.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  // Если это Preflight запрос, сразу отвечаем 204 (No Content)
+  if (req.method === 'OPTIONS') {
+    reply.statusCode = 204;
+    reply.end();
+    return;
+  }
   next();
 });
 
 interface ItemGetRequest extends Fastify.RequestGenericInterface {
-  Params: {
-    id: string;
-  };
+  Params: { id: string };
 }
 
 fastify.get<ItemGetRequest>('/items/:id', (request, reply) => {
   const itemId = Number(request.params.id);
-
   if (!Number.isFinite(itemId)) {
-    reply
-      .status(400)
-      .send({ success: false, error: 'Item ID path param should be a number' });
+    reply.status(400).send({ success: false, error: 'Item ID path param should be a number' });
     return;
   }
 
   const item = ITEMS.find(item => item.id === itemId);
-
   if (!item) {
-    reply
-      .status(404)
-      .send({ success: false, error: "Item with requested id doesn't exist" });
+    reply.status(404).send({ success: false, error: "Item with requested id doesn't exist" });
     return;
   }
 
-  return {
-    ...item,
-    needsRevision: doesItemNeedRevision(item),
-  };
+  return { ...item, needsRevision: doesItemNeedRevision(item) };
 });
 
 interface ItemsGetRequest extends Fastify.RequestGenericInterface {
   Querystring: {
-    q?: string;
-    limit?: string;
-    skip?: string;
-    categories?: string;
-    needsRevision?: string;
+    q?: string; limit?: string; skip?: string; categories?: string;
+    needsRevision?: string; sortColumn?: string; sortDirection?: string;
   };
 }
 
 fastify.get<ItemsGetRequest>('/items', request => {
-  const {
-    q,
-    limit,
-    skip,
-    needsRevision,
-    categories,
-    sortColumn,
-    sortDirection,
-  } = ItemsGetInQuerySchema.parse(request.query);
+  const { q, limit, skip, needsRevision, categories, sortColumn, sortDirection } = ItemsGetInQuerySchema.parse(request.query);
 
   const filteredItems = ITEMS.filter(item => {
     return (
       item.title.toLowerCase().includes(q.toLowerCase()) &&
       (!needsRevision || doesItemNeedRevision(item)) &&
-      (!categories?.length ||
-        categories.some(category => item.category === category))
+      (!categories?.length || categories.some(cat => item.category === cat))
     );
   });
 
@@ -90,19 +76,10 @@ fastify.get<ItemsGetRequest>('/items', request => {
     items: filteredItems
       .toSorted((item1, item2) => {
         let comparisonValue = 0;
-
         if (!sortDirection) return comparisonValue;
-
-        if (sortColumn === 'title') {
-          comparisonValue = item1.title.localeCompare(item2.title);
-        } else if (sortColumn === 'createdAt') {
-          comparisonValue =
-            new Date(item1.createdAt).valueOf() -
-            new Date(item2.createdAt).valueOf();
-        } else if (sortColumn === 'price') {
-          comparisonValue = (item1.price ?? 0) - (item2.price ?? 0);
-        }
-
+        if (sortColumn === 'title') comparisonValue = item1.title.localeCompare(item2.title);
+        else if (sortColumn === 'createdAt') comparisonValue = new Date(item1.createdAt).valueOf() - new Date(item2.createdAt).valueOf();
+        else if (sortColumn === 'price') comparisonValue = (item1.price ?? 0) - (item2.price ?? 0);
         return (sortDirection === 'desc' ? -1 : 1) * comparisonValue;
       })
       .slice(skip, skip + limit)
@@ -118,34 +95,29 @@ fastify.get<ItemsGetRequest>('/items', request => {
 });
 
 interface ItemUpdateRequest extends Fastify.RequestGenericInterface {
-  Params: {
-    id: string;
-  };
+  Params: { id: string };
 }
 
 fastify.put<ItemUpdateRequest>('/items/:id', (request, reply) => {
   const itemId = Number(request.params.id);
-
   if (!Number.isFinite(itemId)) {
-    reply
-      .status(400)
-      .send({ success: false, error: 'Item ID path param should be a number' });
+    reply.status(400).send({ success: false, error: 'Item ID path param should be a number' });
     return;
   }
 
   const itemIndex = ITEMS.findIndex(item => item.id === itemId);
-
   if (itemIndex === -1) {
-    reply
-      .status(404)
-      .send({ success: false, error: "Item with requested id doesn't exist" });
+    reply.status(404).send({ success: false, error: "Item with requested id doesn't exist" });
     return;
   }
 
   try {
+    const body = request.body as any;
+
+    // Теперь приоритет у категории из body, если её нет — старая
     const parsedData = ItemUpdateInSchema.parse({
-      category: ITEMS[itemIndex].category,
-      ...(request.body as {}),
+      category: body.category || ITEMS[itemIndex].category,
+      ...body,
     });
 
     ITEMS[itemIndex] = {
@@ -161,7 +133,6 @@ fastify.put<ItemUpdateRequest>('/items/:id', (request, reply) => {
       reply.status(400).send({ success: false, error: treeifyError(error) });
       return;
     }
-
     throw error;
   }
 });

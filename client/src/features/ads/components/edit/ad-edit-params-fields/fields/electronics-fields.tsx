@@ -8,11 +8,21 @@ import {
 import type { FieldConfig } from "@/features/ads/types";
 
 const FIELDS: FieldConfig[] = [
-  { type: "select", name: "type", label: "Тип", options: ELECTRONICS_TYPE_OPTIONS },
-  { type: "input", name: "brand", label: "Бренд" },
-  { type: "input", name: "model", label: "Модель" },
-  { type: "input", name: "color", label: "Цвет" },
-  { type: "select", name: "condition", label: "Состояние", options: ELECTRONICS_CONDITION_OPTIONS }
+  {
+    type: "select",
+    name: ["params", "type"],
+    label: "Тип",
+    options: ELECTRONICS_TYPE_OPTIONS
+  },
+  { type: "input", name: ["params", "brand"], label: "Бренд" },
+  { type: "input", name: ["params", "model"], label: "Модель" },
+  { type: "input", name: ["params", "color"], label: "Цвет" },
+  {
+    type: "select",
+    name: ["params", "condition"],
+    label: "Состояние",
+    options: ELECTRONICS_CONDITION_OPTIONS
+  }
 ];
 
 export const ElectronicsFields = (): JSX.Element => <ParamsFieldsList fields={FIELDS} />;

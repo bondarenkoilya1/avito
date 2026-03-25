@@ -1,13 +1,13 @@
 export type InputFieldConfig = {
   type: "input";
-  name: string;
+  name: string | string[];
   label: string;
   inputType?: "text" | "number";
 };
 
 export type SelectFieldConfig = {
   type: "select";
-  name: string;
+  name: string | string[];
   label: string;
   options: { value: string; label: string }[];
 };
