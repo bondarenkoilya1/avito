@@ -1,11 +1,10 @@
-import { createContext, type ReactNode, useContext, useState, type JSX } from "react";
-
-import { useAdsFilters } from "@/features/ads/hooks/use-ads-filters";
-import type { AdCategory, AdsSortValue } from "@/features/ads/types";
-import type { AdCardType } from "@/features/ads/types/ad.types";
+import { createContext, type JSX, type ReactNode, useContext, useState } from "react";
 
 import type { ViewMode } from "@/features/ads/components/list/toolbar/toolbar";
 import { PAGE_SIZE } from "@/features/ads/constants";
+import { useAdsFilters } from "@/features/ads/hooks/use-ads-filters";
+import type { AdCategory, AdsSortValue } from "@/features/ads/types";
+import type { AdCardType } from "@/features/ads/types/ad.types";
 
 type FilterContextType = {
   items: AdCardType[];
@@ -28,6 +27,7 @@ type FilterContextType = {
 
 const FilterContext = createContext<FilterContextType | null>(null);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useFilterContext = (): FilterContextType => {
   const context = useContext(FilterContext);
   if (!context) {

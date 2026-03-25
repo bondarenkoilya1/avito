@@ -1,13 +1,13 @@
 import { App } from "antd";
 import type { AxiosError } from "axios";
 
+import { type ApiErrorResponse, getApiErrorMessage } from "@/shared/api";
+
 import { type AdUpdateType } from "../types";
 
 import { replaceAd, type UpdateAdResponseType } from "../api/replace-ad";
 
 import { useMutation, type UseMutationResult, useQueryClient } from "@tanstack/react-query";
-
-import { type ApiErrorResponse, getApiErrorMessage } from "@/shared/api";
 
 export const useUpdateAd = (
   id: number
