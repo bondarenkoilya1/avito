@@ -1,20 +1,31 @@
-import { generateResponse } from "@/features/ai/api";
-import type { GenerateRequestType, SimplifiedGenerateResponseType } from "@/features/ai/types";
+import { message } from "antd";
+import type { AxiosError } from "axios";
 
-import type { UseMutationResult } from "@tanstack/react-query";
-import { useMutation } from "@tanstack/react-query";
+import { generateResponse } from "@/features/ai/api";
+import type {
+  GenerateRequestType,
+  GenerateResponseType,
+  SimplifiedGenerateResponseType
+} from "@/features/ai/types";
+
+import { useMutation, type UseMutationResult } from "@tanstack/react-query";
 
 type UseGenerateResponseReturnType = UseMutationResult<
   SimplifiedGenerateResponseType,
-  Error,
+  AxiosError<GenerateResponseType>,
   GenerateRequestType
 >;
 
-export const useGenerateResponse = (): UseGenerateResponseReturnType => {
+export const useGenerateResponse = (
+  onSuccess?: (data: SimplifiedGenerateResponseType) => void
+): UseGenerateResponseReturnType => {
   return useMutation({
-    mutationFn: generateResponse,
-    onError: (error) => {
-      console.error("Ошибка при запросе к LLM:", error.message);
+    mutationFn: (payload: GenerateRequestType) => generateResponse(payload),
+    onSuccess: (data) => {
+      onSuccess?.(data);
+    },
+    onError: () => {
+      void message.error("Произошла ошибка при генерации");
     }
   });
 };

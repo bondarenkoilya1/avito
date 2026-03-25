@@ -1,4 +1,4 @@
-import { message } from "antd";
+import { App } from "antd";
 import type { AxiosError } from "axios";
 
 import { type AdUpdateType } from "../types";
@@ -11,6 +11,8 @@ export const useUpdateAd = (
   id: number
 ): UseMutationResult<UpdateAdResponseType, AxiosError<UpdateAdResponseType>, AdUpdateType> => {
   const queryClient = useQueryClient();
+
+  const { message } = App.useApp();
 
   return useMutation<UpdateAdResponseType, AxiosError<UpdateAdResponseType>, AdUpdateType>({
     mutationFn: (data: AdUpdateType) => replaceAd(id, data),

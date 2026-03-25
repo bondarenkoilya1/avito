@@ -6,6 +6,24 @@
   margin: 4px 0 20px;
 }
 
+/* Фиксированная ширина контейнера для всех Input и Select кроме TextArea */
+.fieldFixedWidth {
+  width: 100%; /* растягивается до max-width */
+  max-width: 456px; /* ограничивает весь контейнер */
+}
+
+.fieldFixedWidth :global(.ant-input):not(.ant-input-textarea),
+.fieldFixedWidth :global(.ant-select-selector) {
+  width: 100% !important; /* внутренний input/select тянется на весь контейнер */
+}
+
+/* Цена: Input растягивается внутри flex, кнопка фиксированная */
+.priceInput {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Секции характеристик */
 .section {
   display: flex;
   flex-direction: column;
@@ -17,6 +35,7 @@
   font-size: 16px;
 }
 
+/* Счетчик символов для TextArea */
 .charCounter {
   display: block;
   margin-top: 4px;

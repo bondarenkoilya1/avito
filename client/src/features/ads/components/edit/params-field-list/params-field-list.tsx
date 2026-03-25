@@ -7,13 +7,16 @@ type ParamsFieldsListProps = {
   fields: FieldConfig[];
 };
 
+import css from "../ad-edit-form/ad-edit-form.module.css";
+
 export const ParamsFieldsList = ({ fields }: ParamsFieldsListProps): JSX.Element => (
   <>
     {fields.map((field) => (
       <Form.Item
         key={Array.isArray(field.name) ? field.name.join("-") : field.name}
         name={field.name}
-        label={field.label}>
+        label={field.label}
+        className={css.fieldFixedWidth}>
         {field.type === "input" ? (
           <Input type={field.inputType} />
         ) : (

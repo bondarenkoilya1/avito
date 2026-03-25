@@ -1,0 +1,59 @@
+.button {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.popover :global(.ant-popover-inner),
+.popoverError :global(.ant-popover-inner) {
+  min-width: 320px;
+  padding: 16px;
+  border-radius: 12px;
+
+  background: var(--ant-color-bg-elevated);
+  box-shadow: var(--ant-box-shadow-secondary);
+}
+
+.popover :global(.ant-popover-title),
+.popoverError :global(.ant-popover-title) {
+  margin-bottom: 0;
+  padding-bottom: 8px;
+  font-size: 16px;
+}
+
+.popover :global(.ant-popover-title) {
+  border-bottom: 1px solid var(--ant-color-border-secondary);
+}
+
+.popoverError :global(.ant-popover-inner) {
+  border: 1px solid var(--ant-color-error-border);
+}
+
+.popoverError :global(.ant-popover-title) {
+  border-bottom: 1px solid var(--ant-color-error-border);
+  color: var(--ant-color-error-text);
+}
+
+.popoverError :global(.ant-popover-arrow)::before {
+  background: var(--ant-color-bg-elevated);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.responseText {
+  overflow-y: auto;
+  display: block;
+
+  max-height: 400px;
+
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ant-color-text);
+  word-break: normal;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
