@@ -5,13 +5,13 @@ services:
       - "5555:5555"
     environment:
       - PORT=5555
+      - OLLAMA_API_URL=http://host.docker.internal:11434
 
   client:
     build: ./client
     ports:
       - "5173:5173"
     environment:
-      - VITE_API_URL=http://server:5555
-      - OLLAMA_API_URL=http://host.docker.internal:11434
+      - VITE_API_URL=http://localhost:5555
     depends_on:
       - server
