@@ -3,6 +3,7 @@ import { Button, Divider, Flex, Form, Input, Select, Typography } from "antd";
 import type { JSX } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { useFormDraft } from "@/features/ads/hooks";
 import { useUpdateAd } from "@/features/ads/hooks/use-replace-ad";
 import { CATEGORY_OPTIONS, MAX_DESCRIPTION_LENGTH } from "@/features/ads/pages/ad-edit-page";
 import { type AdCategory, type AdType, type AdUpdateType } from "@/features/ads/types";
@@ -24,6 +25,7 @@ export const AdEditForm = ({ initialValues }: AdEditFormProps): JSX.Element => {
   const [form] = Form.useForm<AdUpdateType>();
 
   const { mutate, isPending } = useUpdateAd(Number(id));
+  const { saveDraft, clearDraft } = useFormDraft(id, form);
 
   const category = Form.useWatch("category", form);
   const description = Form.useWatch("description", form) ?? "";
@@ -34,20 +36,28 @@ export const AdEditForm = ({ initialValues }: AdEditFormProps): JSX.Element => {
         ...initialValues,
         price: initialValues.price ?? undefined
       };
-
       form.setFieldsValue(sanitizedValues as AdUpdateType);
     }
   }, [initialValues, form]);
 
   const handleCategoryChange = (): void => {
     void form.setFieldValue("params", {});
+    saveDraft();
   };
 
   const onFinish = (values: AdUpdateType): void => {
-    mutate({
-      ...values,
-      price: Number(values.price)
-    });
+    mutate(
+      {
+        ...values,
+        price: values.price ? Number(values.price) : 0
+      },
+      {
+        onSuccess: () => {
+          clearDraft();
+          navigate(`/ads/${id}`);
+        }
+      }
+    );
   };
 
   return (
@@ -55,8 +65,9 @@ export const AdEditForm = ({ initialValues }: AdEditFormProps): JSX.Element => {
       form={form}
       layout="vertical"
       className={css.form}
-      initialValues={initialValues}
-      onFinish={onFinish}>
+      onFinish={onFinish}
+      onValuesChange={saveDraft} // Вот это заменяет интервал и работает четко
+    >
       <Form.Item
         name="category"
         label="Категория"
@@ -108,7 +119,7 @@ export const AdEditForm = ({ initialValues }: AdEditFormProps): JSX.Element => {
             {description.length} / {MAX_DESCRIPTION_LENGTH}
           </Text>
         }>
-        <TextArea rows={2} maxLength={MAX_DESCRIPTION_LENGTH} disabled={isPending} />
+        <TextArea rows={4} maxLength={MAX_DESCRIPTION_LENGTH} disabled={isPending} />
       </Form.Item>
 
       <Flex gap={8}>
