@@ -2,8 +2,6 @@ import { Button, Flex, Typography } from "antd";
 import type { JSX } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { ThemeToggle } from "@/widgets";
-
 import css from "./ad-details-header.module.css";
 
 import { ArrowLeftOutlined, EditOutlined } from "@ant-design/icons";
@@ -33,7 +31,6 @@ export const AdDetailsHeader = ({
         <Button type="link" icon={<ArrowLeftOutlined />} onClick={() => navigate(-1)}>
           К списку объявлений
         </Button>
-        <ThemeToggle />
       </Flex>
 
       <Flex justify="space-between" align="flex-start" className={css.header}>
