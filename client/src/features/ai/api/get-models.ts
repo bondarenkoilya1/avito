@@ -1,8 +1,9 @@
-import { api } from "@/features/ai/api";
 import type { ModelsType, SimplifiedModelType } from "@/features/ai/types";
 
+import { apiOllama } from "@/shared/api";
+
 export const getModels = async (): Promise<SimplifiedModelType[]> => {
-  const models = await api.get<ModelsType>("/tags");
+  const models = await apiOllama.get<ModelsType>("/tags");
 
   return models.data.models
     .map((model) => ({

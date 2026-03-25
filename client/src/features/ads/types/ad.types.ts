@@ -53,3 +53,11 @@ type ElectronicsItemParams = {
   condition?: "new" | "used";
   color?: string;
 };
+
+export type AdUpdateType = {
+  category: AdCategory;
+  title: string;
+  description?: string;
+  price: number;
+  params: AutoItemParams | RealEstateItemParams | ElectronicsItemParams;
+};

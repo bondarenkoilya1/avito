@@ -1,8 +1,5 @@
 import type { AdResponse } from "@/features/ads/api/get-ad";
-import {
-  FIELD_LABELS,
-  REQUIRED_FIELDS_BY_CATEGORY
-} from "@/features/ads/pages/ad-details-page/lib/labels";
+import { FIELD_LABELS, REQUIRED_FIELDS_BY_CATEGORY } from "@/features/ads/lib/labels";
 
 export const getMissingFields = (ad: AdResponse): string[] => {
   const missing: string[] = [];

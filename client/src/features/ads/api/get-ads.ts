@@ -1,7 +1,8 @@
-import { api } from "@/features/ads/api";
 import { DEFAULT_ADS_SORT } from "@/features/ads/components";
 import type { AdsResponse, AdsSortValue } from "@/features/ads/types";
 import type { GetAdsParams } from "@/features/ads/types/api.types";
+
+import { api } from "@/shared/api";
 
 const SORT_MAP: Record<AdsSortValue, { sortColumn: string; sortDirection: string }> = {
   title_asc: { sortColumn: "title", sortDirection: "asc" },
