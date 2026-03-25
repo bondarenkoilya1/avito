@@ -10,6 +10,8 @@ type FilterContextType = {
   items: AdCardType[];
   total: number;
   isLoading: boolean;
+  isError: boolean;
+  errorMessage?: string;
   page: number;
   searchValue: string;
   categories: AdCategory[];

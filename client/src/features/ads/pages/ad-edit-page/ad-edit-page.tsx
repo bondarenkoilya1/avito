@@ -27,7 +27,7 @@ export const AdEditPage = (): JSX.Element => {
       ) : isError || !ad || Number.isNaN(adId) ? (
         <Alert
           type="error"
-          title="Ошибка"
+          title="Не удалось загрузить объявление для изменения"
           description={errorMessage || "Объявление не найдено"}
           showIcon
         />

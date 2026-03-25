@@ -1,5 +1,5 @@
 import { type JSX } from "react";
-import { Flex, Space, Typography } from "antd";
+import { Alert, Flex, Space, Typography } from "antd";
 
 import { Filter, PaginationComponent, Toolbar } from "@/features/ads/components";
 import { AdCardList } from "@/features/ads/components/list/ad-card-list";
@@ -23,7 +23,9 @@ const AdsListContent = (): JSX.Element => {
     setPage,
     search,
     sort,
-    setViewMode
+    setViewMode,
+    isError,
+    errorMessage
   } = useFilterContext();
 
   return (
@@ -55,16 +57,29 @@ const AdsListContent = (): JSX.Element => {
               onViewModeChange={setViewMode}
             />
 
-            <AdCardList ads={items} isLoading={isLoading} viewMode={viewMode} />
+            {isError ? (
+              <div className={css.container}>
+                <Alert
+                  type="error"
+                  title="Не удалось загрузить объявления"
+                  description={errorMessage ?? "Попробуйте обновить страницу позже."}
+                  showIcon
+                />
+              </div>
+            ) : (
+              <>
+                <AdCardList ads={items} isLoading={isLoading} viewMode={viewMode} />
 
-            <div className={css.pagination}>
-              <PaginationComponent
-                current={page}
-                pageSize={PAGE_SIZE}
-                total={total}
-                onChange={setPage}
-              />
-            </div>
+                <div className={css.pagination}>
+                  <PaginationComponent
+                    current={page}
+                    pageSize={PAGE_SIZE}
+                    total={total}
+                    onChange={setPage}
+                  />
+                </div>
+              </>
+            )}
           </Flex>
         </Flex>
       </Flex>
@@ -72,10 +87,8 @@ const AdsListContent = (): JSX.Element => {
   );
 };
 
-export const AdsListPage = (): JSX.Element => {
-  return (
-    <FilterProvider>
-      <AdsListContent />
-    </FilterProvider>
-  );
-};
+export const AdsListPage = (): JSX.Element => (
+  <FilterProvider>
+    <AdsListContent />
+  </FilterProvider>
+);

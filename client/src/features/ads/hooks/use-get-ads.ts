@@ -6,10 +6,12 @@ import { useQuery } from "@tanstack/react-query";
 
 type UseGetAdsReturnType = AdsResponse & {
   isLoading: boolean;
+  isError: boolean;
+  errorMessage?: string;
 };
 
 export const useGetAds = (params: GetAdsParams): UseGetAdsReturnType => {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["ads", params],
     queryFn: () => getAds(params)
   });
@@ -17,6 +19,8 @@ export const useGetAds = (params: GetAdsParams): UseGetAdsReturnType => {
   return {
     items: data?.items ?? [],
     total: data?.total ?? 0,
-    isLoading
+    isLoading,
+    isError,
+    errorMessage: (error as Error)?.message
   };
 };
