@@ -4,8 +4,8 @@ import { api } from "@/shared/api";
 
 export type AdResponse = AdType & { needsRevision: boolean };
 
-export const getAd = async (id: number): Promise<AdResponse> => {
-  const ad = await api.get<AdResponse>(`/items/${id}`);
+export const getAd = async (id: number, signal?: AbortSignal): Promise<AdResponse> => {
+  const ad = await api.get<AdResponse>(`/items/${id}`, { signal });
 
   return ad.data;
 };

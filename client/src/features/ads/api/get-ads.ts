@@ -13,8 +13,9 @@ const SORT_MAP: Record<AdsSortValue, { sortColumn: string; sortDirection: string
   price_desc: { sortColumn: "price", sortDirection: "desc" }
 };
 
-export const getAds = async (params: GetAdsParams): Promise<AdsResponse> => {
+export const getAds = async (params: GetAdsParams, signal?: AbortSignal): Promise<AdsResponse> => {
   const ads = await api.get<AdsResponse>("/items", {
+    signal,
     params: {
       q: params.q,
       limit: params.pageSize,

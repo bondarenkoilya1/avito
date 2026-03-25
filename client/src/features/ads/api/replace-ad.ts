@@ -9,8 +9,9 @@ export type UpdateAdResponseType = {
 
 export const replaceAd = async (
   id: number,
-  payload: AdUpdateType
+  payload: AdUpdateType,
+  signal?: AbortSignal
 ): Promise<UpdateAdResponseType> => {
-  const response = await api.put<UpdateAdResponseType>(`/items/${id}`, payload);
+  const response = await api.put<UpdateAdResponseType>(`/items/${id}`, payload, { signal });
   return response.data;
 };

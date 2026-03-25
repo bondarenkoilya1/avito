@@ -13,7 +13,7 @@ type UseGetModelsReturnType = SimplifiedModelsType & {
 export const useGetModels = (): UseGetModelsReturnType => {
   const { data, isLoading } = useQuery({
     queryKey: ["models"],
-    queryFn: getModels
+    queryFn: ({ signal }) => getModels(signal)
   });
 
   const models = data ?? [];
