@@ -1,5 +1,5 @@
 import { type JSX } from "react";
-import { Alert, Flex, Tag } from "antd";
+import { Alert, Flex } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 
 import {
@@ -9,7 +9,6 @@ import {
   AdRevisionAlert,
   AdSpecifications
 } from "@/features/ads/components";
-import { getCategoryLabel } from "@/features/ads/constants";
 import { useGetAd } from "@/features/ads/hooks";
 import { formatDate, formatPrice, getMissingFields } from "@/features/ads/lib";
 import { AdDetailsSkeleton } from "@/features/ads/pages/ad-details-page/ad-details-skeleton";
@@ -87,7 +86,6 @@ export const AdDetailsPage = (): JSX.Element | null => {
 
           <Flex vertical gap={16} className={css.info}>
             <AdRevisionAlert isVisible={ad.needsRevision} missingFields={missingFields} />
-            <Tag color="blue">{getCategoryLabel(ad.category)}</Tag>
             <AdSpecifications params={ad.params} />
           </Flex>
         </Flex>
