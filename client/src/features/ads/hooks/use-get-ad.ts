@@ -12,7 +12,7 @@ type UseGetAdReturnType = {
 export const useGetAd = (number: number): UseGetAdReturnType => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["ad", number],
-    queryFn: () => getAd(number),
+    queryFn: ({ signal }) => getAd(number, signal),
     enabled: Number.isFinite(number)
   });
 

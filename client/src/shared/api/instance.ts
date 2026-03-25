@@ -14,6 +14,7 @@ const MAX_RETRIES = 2;
 const RETRY_DELAY = 1_000;
 
 const isRetryable = (error: AxiosError): boolean => {
+  if (axios.isCancel(error)) return false;
   if (!error.response) return true;
   return error.response.status >= 500;
 };

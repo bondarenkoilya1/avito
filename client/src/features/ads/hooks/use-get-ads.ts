@@ -2,7 +2,7 @@ import { getAds } from "@/features/ads/api";
 import type { AdsResponse } from "@/features/ads/types";
 import type { GetAdsParams } from "@/features/ads/types/api.types";
 
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 type UseGetAdsReturnType = AdsResponse & {
   isLoading: boolean;
@@ -13,7 +13,8 @@ type UseGetAdsReturnType = AdsResponse & {
 export const useGetAds = (params: GetAdsParams): UseGetAdsReturnType => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["ads", params],
-    queryFn: () => getAds(params)
+    queryFn: ({ signal }) => getAds(params, signal),
+    placeholderData: keepPreviousData
   });
 
   return {
