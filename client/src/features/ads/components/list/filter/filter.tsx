@@ -7,13 +7,8 @@ import { useFilterContext } from "@/features/ads/contexts";
 import css from "./filter.module.css";
 
 export const Filter = (): JSX.Element => {
-  const {
-    categories,
-    needsRevision,
-    changeCategories,
-    changeNeedsRevision,
-    resetSearch
-  } = useFilterContext();
+  const { categories, needsRevision, changeCategories, changeNeedsRevision, resetSearch } =
+    useFilterContext();
 
   const hasActiveFilters = categories.length > 0 || needsRevision;
 
