@@ -7,7 +7,7 @@ import { useUpdateAd } from "@/features/ads/hooks/use-replace-ad";
 import { CATEGORY_OPTIONS, MAX_DESCRIPTION_LENGTH } from "@/features/ads/pages/ad-edit-page";
 import { type AdCategory, type AdType, type AdUpdateType } from "@/features/ads/types";
 
-import { AiGenerateButton } from "@/shared/components";
+import { AiGenerateButton } from "@/shared/ui";
 
 import { AdEditParamsFields } from "../ad-edit-params-fields";
 

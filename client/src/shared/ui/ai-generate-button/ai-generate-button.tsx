@@ -8,7 +8,7 @@ import { BulbOutlined, ReloadOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;
 
-interface AiLabels {
+type AiLabels = {
   buttonDefault: string;
   buttonLoading: string;
   buttonRetry: string;
@@ -17,7 +17,7 @@ interface AiLabels {
   errorMessage?: string;
   applyButton?: string;
   closeButton?: string;
-}
+};
 
 type AiGenerateButtonProps = {
   onGenerate: () => Promise<string>;
