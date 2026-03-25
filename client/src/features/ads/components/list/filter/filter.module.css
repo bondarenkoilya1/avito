@@ -1,3 +1,54 @@
-.wrapper {
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
   width: 256px;
+
+  font-family: sans-serif;
+}
+
+.card {
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.card :global(.ant-collapse-body) {
+  padding-left: 0 !important;
+}
+
+.card :global(.ant-collapse-ghost) > :global(.ant-collapse-item) > :global(.ant-collapse-header) {
+  align-items: center;
+  padding: 0 !important;
+}
+
+.card :global(.ant-typography) {
+  font-weight: 600;
+}
+
+.resetButton {
+  width: 256px !important;
+  height: 48px !important;
+  border: none !important;
+  border-radius: 12px !important;
+
+  font-size: 15px;
+  color: #8c8c8c !important;
+
+  background: #fff !important;
+  box-shadow: none;
+}
+
+.resetButton:disabled {
+  color: #d9d9d9 !important;
+  background: #fff !important;
+}
+
+.optionsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
 }

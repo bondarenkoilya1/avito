@@ -1,4 +1,4 @@
-import { Checkbox, Divider, Space, Switch, Typography } from "antd";
+import { Checkbox, Divider, Switch, Typography } from "antd";
 import type { JSX } from "react";
 
 import { FILTER_CATEGORIES } from "@/features/ads/components/list/filter/filter.constants";
@@ -20,18 +20,26 @@ export const FilterItems = ({
   onNeedsRevisionChange
 }: FilterItemsProps): JSX.Element => {
   return (
-    <Space orientation="vertical" size="small">
-      <Checkbox.Group<AdCategory>
+    <div className={css.optionsWrapper}>
+      <Checkbox.Group
         options={FILTER_CATEGORIES}
         value={selectedCategories}
         onChange={onCategoriesChange}
-        className={css.options}
+        style={{ display: "flex", flexDirection: "column", gap: "8px" }}
       />
-      <Divider className={css.divider} />
-      <label className={css.label}>
+
+      <Divider style={{ margin: "12px 0" }} />
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: "4px"
+        }}>
         <Typography.Text>Только требующие доработок</Typography.Text>
-        <Switch checked={needsRevision} onChange={onNeedsRevisionChange} />
-      </label>
-    </Space>
+        <Switch size="medium" checked={needsRevision} onChange={onNeedsRevisionChange} />
+      </div>
+    </div>
   );
 };

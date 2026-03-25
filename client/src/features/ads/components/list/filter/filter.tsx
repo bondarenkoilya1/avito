@@ -1,5 +1,5 @@
 import { type JSX } from "react";
-import { Button, Collapse, Space } from "antd";
+import { Button, Collapse, Typography } from "antd";
 
 import { FilterItems } from "@/features/ads/components";
 import type { AdCategory } from "@/features/ads/types";
@@ -13,7 +13,6 @@ type FilterProps = {
   onNeedsRevisionChange: () => void;
   onReset: () => void;
 };
-
 export const Filter = ({
   selectedCategories,
   needsRevision,
@@ -24,29 +23,36 @@ export const Filter = ({
   const hasActiveFilters = selectedCategories.length > 0 || needsRevision;
 
   return (
-    <Space orientation="vertical" className={css.wrapper}>
-      <Collapse
-        bordered
-        defaultActiveKey={["categories"]}
-        expandIconPlacement="end"
-        items={[
-          {
-            key: "categories",
-            label: "Категория",
-            children: (
-              <FilterItems
-                selectedCategories={selectedCategories}
-                needsRevision={needsRevision}
-                onCategoriesChange={onCategoriesChange}
-                onNeedsRevisionChange={onNeedsRevisionChange}
-              />
-            )
-          }
-        ]}
-      />
-      <Button block onClick={onReset} disabled={!hasActiveFilters}>
+    <div className={css.container}>
+      <div className={css.card}>
+        <Typography.Text strong style={{ display: "block", fontSize: "20px", marginBottom: 16 }}>
+          Фильтры
+        </Typography.Text>
+
+        <Collapse
+          ghost
+          defaultActiveKey={["categories"]}
+          expandIconPlacement="end"
+          items={[
+            {
+              key: "categories",
+              label: <span style={{ fontSize: "16px" }}>Категория</span>,
+              children: (
+                <FilterItems
+                  selectedCategories={selectedCategories}
+                  needsRevision={needsRevision}
+                  onCategoriesChange={onCategoriesChange}
+                  onNeedsRevisionChange={onNeedsRevisionChange}
+                />
+              )
+            }
+          ]}
+        />
+      </div>
+
+      <Button onClick={onReset} disabled={!hasActiveFilters} className={css.resetButton}>
         Сбросить фильтры
       </Button>
-    </Space>
+    </div>
   );
 };
