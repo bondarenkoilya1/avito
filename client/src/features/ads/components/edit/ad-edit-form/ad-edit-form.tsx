@@ -17,21 +17,36 @@ import css from "./ad-edit-form.module.css";
 const { Text } = Typography;
 const { TextArea } = Input;
 
-const PRICE_AI_LABELS = {
-  buttonDefault: "Узнать рыночную цену",
+const DEFAULT_AI_LABELS = {
   buttonLoading: "Выполняется запрос",
   buttonRetry: "Повторить запрос",
   popoverTitle: "Ответ AI:",
-  popoverErrorTitle: "Произошла ошибка при запросе к AI",
-  errorMessage: "Попробуйте повторить запрос или закройте уведомление",
+  popoverErrorTitle: "Ошибка запроса",
+  errorMessage: "Не удалось получить оценку. Попробуйте позже.",
   applyButton: "Применить",
   closeButton: "Закрыть"
+};
+
+const PRICE_AI_LABELS = {
+  buttonDefault: "Узнать рыночную цену",
+  ...DEFAULT_AI_LABELS
+};
+
+const DESCRIPTION_GEN_LABELS = {
+  buttonDefault: "Придумать описание",
+  ...DEFAULT_AI_LABELS
+};
+
+const DESCRIPTION_IMPROVE_LABELS = {
+  buttonDefault: "Улучшить описание",
+  ...DEFAULT_AI_LABELS
 };
 
 type AdEditFormProps = {
   adId: number;
   initialValues?: AdType;
   onGeneratePrice?: () => Promise<string>;
+  onGenerateDescription?: (currentText: string) => Promise<string>;
 };
 
 const extractPrice = (value: string): string | null => {
@@ -43,7 +58,8 @@ const extractPrice = (value: string): string | null => {
 export const AdEditForm = ({
   adId,
   initialValues,
-  onGeneratePrice
+  onGeneratePrice,
+  onGenerateDescription
 }: AdEditFormProps): JSX.Element => {
   const navigate = useNavigate();
   const [form] = Form.useForm<AdUpdateType>();
@@ -53,6 +69,7 @@ export const AdEditForm = ({
 
   const category = Form.useWatch("category", form);
   const description = Form.useWatch("description", form) ?? "";
+  const isDescriptionEmpty = description.trim().length === 0;
 
   useEffect(() => {
     if (initialValues && !form.isFieldsTouched()) {
@@ -64,53 +81,40 @@ export const AdEditForm = ({
     }
   }, [initialValues, form]);
 
-  const handleCategoryChange = useCallback((): void => {
-    form.setFieldValue("params", {});
-    saveDraft();
-  }, [form, saveDraft]);
-
-  const onFinish = useCallback(
-    (values: AdUpdateType): void => {
-      const { title, description, category, params, price } = values;
-
-      let formattedParams = params;
-
-      if (category === "auto" && params) {
-        const p = params as Record<string, unknown>;
-        formattedParams = {
-          ...p,
-          yearOfManufacture: p.yearOfManufacture ? Number(p.yearOfManufacture) : undefined,
-          mileage: p.mileage ? Number(p.mileage) : undefined,
-          enginePower: p.enginePower ? Number(p.enginePower) : undefined
-        };
-      }
-
-      const payload: AdUpdateType = {
-        title,
-        description,
-        category,
-        params: formattedParams,
-        price: price ? Number(price) : 0
-      };
-
-      mutate(payload, {
-        onSuccess: () => {
-          clearDraft();
-          navigate(`/ads/${adId}`);
-        }
-      });
-    },
-    [mutate, adId, clearDraft, navigate]
-  );
-
   const handleApplyPrice = useCallback(
-    (cleanPrice: string): void => {
-      if (cleanPrice) {
-        form.setFieldsValue({ price: Number(cleanPrice) } as AdUpdateType);
+    (val: string) => {
+      if (val) {
+        form.setFieldsValue({ price: Number(val) } as AdUpdateType);
         saveDraft();
       }
     },
     [form, saveDraft]
+  );
+
+  const handleApplyDescription = useCallback(
+    (text: string) => {
+      if (text) {
+        form.setFieldsValue({ description: text } as AdUpdateType);
+        saveDraft();
+      }
+    },
+    [form, saveDraft]
+  );
+
+  const onFinish = useCallback(
+    (values: AdUpdateType) => {
+      const { title, description, category, params, price } = values;
+      mutate(
+        { title, description, category, params, price: price ? Number(price) : 0 },
+        {
+          onSuccess: () => {
+            clearDraft();
+            navigate(`/ads/${adId}`);
+          }
+        }
+      );
+    },
+    [mutate, adId, clearDraft, navigate]
   );
 
   return (
@@ -123,9 +127,15 @@ export const AdEditForm = ({
       <Form.Item
         name="category"
         label="Категория"
-        rules={[{ required: true, message: "Выберите категорию" }]}
+        rules={[{ required: true }]}
         className={css.fieldFixedWidth}>
-        <Select options={CATEGORY_OPTIONS} onChange={handleCategoryChange} />
+        <Select
+          options={CATEGORY_OPTIONS}
+          onChange={() => {
+            form.setFieldValue("params", {});
+            saveDraft();
+          }}
+        />
       </Form.Item>
 
       <Divider className={css.divider} />
@@ -133,7 +143,7 @@ export const AdEditForm = ({
       <Form.Item
         name="title"
         label="Название"
-        rules={[{ required: true, message: "Введите название" }]}
+        rules={[{ required: true }]}
         className={css.fieldFixedWidth}>
         <Input allowClear disabled={isPending} />
       </Form.Item>
@@ -143,7 +153,7 @@ export const AdEditForm = ({
       <div className={css.fieldFixedWidth}>
         <Text style={{ display: "block", marginBottom: 8 }}>Цена</Text>
         <Flex gap={8} align="flex-start">
-          <Form.Item name="price" noStyle rules={[{ required: true, message: "Введите цену" }]}>
+          <Form.Item name="price" noStyle rules={[{ required: true }]}>
             <Input
               type="number"
               allowClear
@@ -152,7 +162,6 @@ export const AdEditForm = ({
               placeholder="0"
             />
           </Form.Item>
-
           {onGeneratePrice && (
             <AiGenerateButton
               onGenerate={onGeneratePrice}
@@ -180,13 +189,24 @@ export const AdEditForm = ({
 
       <Form.Item
         name="description"
-        label="Описание"
+        label={
+          <Flex align="center" gap={12}>
+            <span>Описание</span>
+            {onGenerateDescription && (
+              <AiGenerateButton
+                onGenerate={() => onGenerateDescription(description)}
+                onApply={handleApplyDescription}
+                labels={isDescriptionEmpty ? DESCRIPTION_GEN_LABELS : DESCRIPTION_IMPROVE_LABELS}
+              />
+            )}
+          </Flex>
+        }
         extra={
           <Text type="secondary" style={{ fontSize: 12 }}>
             {description.length} / {MAX_DESCRIPTION_LENGTH}
           </Text>
         }>
-        <TextArea rows={4} maxLength={MAX_DESCRIPTION_LENGTH} disabled={isPending} />
+        <TextArea rows={6} maxLength={MAX_DESCRIPTION_LENGTH} disabled={isPending} />
       </Form.Item>
 
       <Flex gap={8}>

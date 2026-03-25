@@ -95,8 +95,13 @@ export const AiGenerateButton = ({
       open={isPopoverOpen}
       onOpenChange={setIsPopoverOpen}
       trigger="click"
-      placement="bottomLeft"
       classNames={{ root: error ? css.popoverError : css.popover }}
+      styles={{
+        content: {
+          maxWidth: "450px",
+          width: "100%"
+        }
+      }}
       title={
         <Text strong className={css.title}>
           {error ? labels.popoverErrorTitle || "Ошибка" : labels.popoverTitle}

@@ -29,7 +29,7 @@
 }
 
 .popoverError :global(.ant-popover-title) {
-  border-bottom: 1px solid var(--ant-color-error-border-secondary);
+  border-bottom: 1px solid var(--ant-color-error-border);
   color: var(--ant-color-error-text);
 }
 
@@ -45,12 +45,15 @@
 }
 
 .responseText {
+  overflow-y: auto;
   display: block;
+
+  max-height: 400px;
 
   font-size: 14px;
   line-height: 1.6;
   color: var(--ant-color-text);
   word-break: normal;
   overflow-wrap: anywhere;
-  white-space: pre-line;
+  white-space: pre-wrap;
 }
