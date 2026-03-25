@@ -1,7 +1,13 @@
+import type { InternalAxiosRequestConfig } from "axios";
 import axios, { type AxiosError } from "axios";
 
 import { API_URL, OLLAMA_API_URL } from "@/shared/config";
 
+declare module "axios" {
+  export interface InternalAxiosRequestConfig {
+    __retryCount?: number;
+  }
+}
 const API_TIMEOUT = 15_000;
 const OLLAMA_TIMEOUT = 60_000;
 const MAX_RETRIES = 2;
@@ -16,16 +22,16 @@ const delay = (ms: number): Promise<void> => new Promise((resolve) => setTimeout
 
 const createRetryInterceptor = (maxRetries: number) => {
   return async (error: AxiosError): Promise<unknown> => {
-    const config = error.config;
+    const config = error.config as InternalAxiosRequestConfig;
     if (!config) return Promise.reject(error);
 
-    const retryCount = ((config as Record<string, unknown>).__retryCount as number) ?? 0;
+    const retryCount = config.__retryCount ?? 0;
 
     if (retryCount >= maxRetries || !isRetryable(error)) {
       return Promise.reject(error);
     }
 
-    (config as Record<string, unknown>).__retryCount = retryCount + 1;
+    config.__retryCount = retryCount + 1;
     await delay(RETRY_DELAY * (retryCount + 1));
 
     return axios(config);
