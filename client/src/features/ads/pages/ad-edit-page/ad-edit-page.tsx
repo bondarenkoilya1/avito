@@ -1,8 +1,9 @@
 import { type JSX } from "react";
-import { Alert, Spin, Typography } from "antd";
+import { Alert, Typography } from "antd";
 import { useParams } from "react-router-dom";
 
 import { AdEditForm } from "@/features/ads/components/edit/ad-edit-form/ad-edit-form";
+import { AdEditFormSkeleton } from "@/features/ads/components/edit/ad-edit-form/ad-edit-form-skeleton";
 import { useGetAd } from "@/features/ads/hooks";
 import {
   DESCRIPTION_GENERATION_INSTRUCTION,
@@ -25,25 +26,14 @@ export const AdEditPage = (): JSX.Element => {
 
   const activeModel = middleModel || weakestModel || strongestModel;
 
-  if (isAdLoading) return <Spin size="large" fullscreen />;
-  if (isError || !ad || Number.isNaN(adId))
-    return (
-      <Alert
-        type="error"
-        title="Ошибка"
-        description={errorMessage || "Объявление не найдено"}
-        showIcon
-      />
-    );
-
   const handleGeneratePrice = async (): Promise<string> => {
-    if (!activeModel) throw new Error("Модель недоступна");
+    if (!activeModel || !ad) throw new Error("Модель недоступна");
     const prompt = `${PRICE_INSTRUCTION}\n\nТовар: ${ad.title}, Категория: ${ad.category}, Параметры: ${JSON.stringify(ad.params)}\n\nОТВЕТЬ НА РУССКОМ.`;
     return mutateAsync({ model: activeModel, prompt });
   };
 
   const handleGenerateDescription = async (currentDescription: string): Promise<string> => {
-    if (!activeModel) throw new Error("Модель недоступна");
+    if (!activeModel || !ad) throw new Error("Модель недоступна");
     const hasText = currentDescription.trim().length > 0;
     const instruction = hasText
       ? DESCRIPTION_IMPROVEMENT_INSTRUCTION
@@ -58,14 +48,26 @@ export const AdEditPage = (): JSX.Element => {
   return (
     <Container maxWidth={942}>
       <Title level={3} style={{ marginBottom: 24 }}>
-        Редактирование объявления #{adId}
+        Редактирование объявления
       </Title>
-      <AdEditForm
-        adId={adId}
-        initialValues={ad}
-        onGeneratePrice={isModelsLoading ? undefined : handleGeneratePrice}
-        onGenerateDescription={isModelsLoading ? undefined : handleGenerateDescription}
-      />
+
+      {isAdLoading ? (
+        <AdEditFormSkeleton />
+      ) : isError || !ad || Number.isNaN(adId) ? (
+        <Alert
+          type="error"
+          title="Ошибка"
+          description={errorMessage || "Объявление не найдено"}
+          showIcon
+        />
+      ) : (
+        <AdEditForm
+          adId={adId}
+          initialValues={ad}
+          onGeneratePrice={isModelsLoading ? undefined : handleGeneratePrice}
+          onGenerateDescription={isModelsLoading ? undefined : handleGenerateDescription}
+        />
+      )}
     </Container>
   );
 };

@@ -14,7 +14,7 @@ const fastify = Fastify({
 
 await fastify.register((await import('@fastify/middie')).default);
 
-// Искуственная задержка ответов, чтобы фдожно было протестировать состояния загрузки
+// Искуственная задержка ответов, чтобы можно было протестировать состояния загрузки
 fastify.use((_, __, next) =>
   new Promise(res => setTimeout(res, 300 + Math.random() * 700)).then(next),
 );

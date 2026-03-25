@@ -1,3 +1,56 @@
-.wrapper {
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
   width: 256px;
+
+  font-family: sans-serif;
+}
+
+.card {
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  background: var(--ant-color-bg-container);
+}
+
+.card :global(.ant-collapse-body) {
+  padding-left: 0 !important;
+}
+
+.card :global(.ant-collapse-ghost) > :global(.ant-collapse-item) > :global(.ant-collapse-header) {
+  align-items: center;
+  padding: 0 !important;
+  color: var(--ant-color-text-heading) !important;
+}
+
+.card :global(.ant-typography) {
+  font-weight: 600;
+  color: var(--ant-color-text-heading);
+}
+
+.resetButton {
+  width: 256px !important;
+  height: 48px !important;
+  border: none !important;
+  border-radius: 12px !important;
+
+  font-size: 15px;
+  color: var(--ant-color-text-description) !important;
+
+  background: var(--ant-color-bg-container) !important;
+  box-shadow: none;
+}
+
+.resetButton:disabled {
+  color: var(--ant-color-text-disabled) !important;
+  background: var(--ant-color-bg-container) !important;
+}
+
+.optionsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
 }
