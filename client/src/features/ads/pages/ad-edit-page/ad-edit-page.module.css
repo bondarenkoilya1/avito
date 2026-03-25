@@ -1,19 +1,33 @@
-.page {
-  min-height: 100vh;
-  padding: 24px 16px;
-  background-color: var(--ant-color-bg-layout);
+.aiPopover :global(.ant-popover-inner) {
+  min-width: 320px;
+  padding: 16px;
+  border-radius: 12px;
+  background: white;
 }
 
-.container {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 32px;
-  border-radius: 8px;
-
-  background-color: var(--ant-color-bg-container);
+.aiContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.title {
-  margin-top: 0;
-  margin-bottom: 24px;
+.aiTitle {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.aiText {
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+.aiActions {
+  display: flex;
+  gap: 8px;
+}
+
+.highlight {
+  border-color: #52c41a !important;
+  box-shadow: 0 0 0 2px rgb(82 196 26 / 20%);
 }
