@@ -2,25 +2,15 @@ import { type JSX } from "react";
 import { Button, Collapse, Typography } from "antd";
 
 import { FilterItems } from "@/features/ads/components";
-import type { AdCategory } from "@/features/ads/types";
+import { useFilterContext } from "@/features/ads/contexts";
 
 import css from "./filter.module.css";
 
-type FilterProps = {
-  selectedCategories: AdCategory[];
-  needsRevision: boolean;
-  onCategoriesChange: (categories: AdCategory[]) => void;
-  onNeedsRevisionChange: () => void;
-  onReset: () => void;
-};
-export const Filter = ({
-  selectedCategories,
-  needsRevision,
-  onCategoriesChange,
-  onNeedsRevisionChange,
-  onReset
-}: FilterProps): JSX.Element => {
-  const hasActiveFilters = selectedCategories.length > 0 || needsRevision;
+export const Filter = (): JSX.Element => {
+  const { categories, needsRevision, changeCategories, changeNeedsRevision, resetSearch } =
+    useFilterContext();
+
+  const hasActiveFilters = categories.length > 0 || needsRevision;
 
   return (
     <div className={css.container}>
@@ -39,10 +29,10 @@ export const Filter = ({
               label: <span style={{ fontSize: "16px" }}>Категория</span>,
               children: (
                 <FilterItems
-                  selectedCategories={selectedCategories}
+                  selectedCategories={categories}
                   needsRevision={needsRevision}
-                  onCategoriesChange={onCategoriesChange}
-                  onNeedsRevisionChange={onNeedsRevisionChange}
+                  onCategoriesChange={changeCategories}
+                  onNeedsRevisionChange={changeNeedsRevision}
                 />
               )
             }
@@ -50,7 +40,7 @@ export const Filter = ({
         />
       </div>
 
-      <Button onClick={onReset} disabled={!hasActiveFilters} className={css.resetButton}>
+      <Button onClick={resetSearch} disabled={!hasActiveFilters} className={css.resetButton}>
         Сбросить фильтры
       </Button>
     </div>

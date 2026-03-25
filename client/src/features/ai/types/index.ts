@@ -1,2 +1,2 @@
 export * from "./models.types";
-export * from "./gerenate.types";
+export * from "./generate.types";

@@ -8,6 +8,18 @@
   font-family: sans-serif;
 }
 
+@media (max-width: 1024px) {
+  .container {
+    width: 220px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
+  }
+}
+
 .card {
   padding: 16px;
   border: none;
@@ -46,6 +58,18 @@
 .resetButton:disabled {
   color: var(--ant-color-text-disabled) !important;
   background: var(--ant-color-bg-container) !important;
+}
+
+@media (max-width: 1024px) {
+  .resetButton {
+    width: 220px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .resetButton {
+    width: 100% !important;
+  }
 }
 
 .optionsWrapper {

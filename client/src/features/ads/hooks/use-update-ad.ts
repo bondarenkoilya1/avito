@@ -1,6 +1,8 @@
 import { App } from "antd";
 import type { AxiosError } from "axios";
 
+import { type ApiErrorResponse, getApiErrorMessage } from "@/shared/api";
+
 import { type AdUpdateType } from "../types";
 
 import { replaceAd, type UpdateAdResponseType } from "../api/replace-ad";
@@ -9,12 +11,12 @@ import { useMutation, type UseMutationResult, useQueryClient } from "@tanstack/r
 
 export const useUpdateAd = (
   id: number
-): UseMutationResult<UpdateAdResponseType, AxiosError<UpdateAdResponseType>, AdUpdateType> => {
+): UseMutationResult<UpdateAdResponseType, AxiosError<ApiErrorResponse>, AdUpdateType> => {
   const queryClient = useQueryClient();
 
   const { message } = App.useApp();
 
-  return useMutation<UpdateAdResponseType, AxiosError<UpdateAdResponseType>, AdUpdateType>({
+  return useMutation<UpdateAdResponseType, AxiosError<ApiErrorResponse>, AdUpdateType>({
     mutationFn: (data: AdUpdateType) => replaceAd(id, data),
 
     onSuccess: (data) => {
@@ -26,15 +28,7 @@ export const useUpdateAd = (
     },
 
     onError: (error) => {
-      const serverError = error.response?.data?.error;
-
-      if (typeof serverError === "string") {
-        void message.error(serverError);
-      } else if (serverError && typeof serverError === "object") {
-        void message.error("Ошибка валидации полей");
-      } else {
-        void message.error("Произошла сетевая ошибка");
-      }
+      void message.error(getApiErrorMessage(error));
     }
   });
 };

@@ -1,0 +1,15 @@
+.fieldFixedWidth {
+  width: 100%;
+  max-width: 456px;
+}
+
+.fieldFixedWidth :global(.ant-input):not(.ant-input-textarea),
+.fieldFixedWidth :global(.ant-select-selector) {
+  width: 100% !important;
+}
+
+@media (max-width: 768px) {
+  .fieldFixedWidth {
+    max-width: 100%;
+  }
+}

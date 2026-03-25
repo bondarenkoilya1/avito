@@ -29,3 +29,28 @@ export const REAL_ESTATE_TYPE_OPTIONS = [
   { value: "house", label: "Дом" },
   { value: "room", label: "Комната" }
 ];
+
+const DEFAULT_AI_LABELS = {
+  buttonLoading: "Выполняется запрос",
+  buttonRetry: "Повторить запрос",
+  popoverTitle: "Ответ AI:",
+  popoverErrorTitle: "Ошибка запроса",
+  errorMessage: "Не удалось получить оценку. Попробуйте позже.",
+  applyButton: "Применить",
+  closeButton: "Закрыть"
+};
+
+export const PRICE_AI_LABELS = {
+  buttonDefault: "Узнать рыночную цену",
+  ...DEFAULT_AI_LABELS
+};
+
+export const DESCRIPTION_GEN_LABELS = {
+  buttonDefault: "Придумать описание",
+  ...DEFAULT_AI_LABELS
+};
+
+export const DESCRIPTION_IMPROVE_LABELS = {
+  buttonDefault: "Улучшить описание",
+  ...DEFAULT_AI_LABELS
+};

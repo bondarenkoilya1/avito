@@ -1,12 +1,10 @@
 import { type JSX, useEffect } from "react";
-import { App as AntdApp, Flex, Layout, theme } from "antd";
+import { App as AntdApp, Layout, theme } from "antd";
 import { Outlet } from "react-router-dom";
 
 import { ThemeToggle } from "@/widgets";
 
-import { Container } from "@/shared/ui";
-
-const { Header, Content } = Layout;
+const { Content } = Layout;
 
 export const App = (): JSX.Element => {
   const { token } = theme.useToken();
@@ -18,13 +16,9 @@ export const App = (): JSX.Element => {
   return (
     <AntdApp>
       <Layout style={{ minHeight: "100vh", background: "transparent" }}>
-        <Header style={{ background: "transparent", padding: "16px 0", height: "auto" }}>
-          <Container>
-            <Flex justify="flex-end" align="center">
-              <ThemeToggle />
-            </Flex>
-          </Container>
-        </Header>
+        <div style={{ position: "fixed", top: 20, right: 24, zIndex: 100 }}>
+          <ThemeToggle />
+        </div>
 
         <Content>
           <Outlet />

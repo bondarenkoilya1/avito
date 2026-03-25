@@ -5,14 +5,10 @@ import { PlaceholderGallery } from "@/features/ads/components/details/placeholde
 
 import css from "./ad-details-gallery.module.css";
 
-type AdDetailsGalleryProps = {
-  photos?: string[];
-};
-
-export const AdDetailsGallery = ({ photos }: AdDetailsGalleryProps): JSX.Element => {
+export const AdDetailsGallery = (): JSX.Element => {
   return (
     <Flex vertical gap={12} className={css.gallery}>
-      <PlaceholderGallery photos={photos} />
+      <PlaceholderGallery />
     </Flex>
   );
 };

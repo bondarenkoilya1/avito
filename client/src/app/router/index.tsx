@@ -6,19 +6,22 @@ import { App } from "@/app/app";
 import { AdDetailsPage, AdEditPage, AdsListPage } from "@/features/ads/pages";
 
 import { NotFoundPage } from "@/shared/pages/not-found-page/not-found-page";
+import { ErrorBoundary } from "@/shared/ui";
 
 export const Router = (): JSX.Element => {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />}>
-          <Route index element={<Navigate to="/ads" replace />} />
-          <Route path="ads" element={<AdsListPage />} />
-          <Route path="ads/:id" element={<AdDetailsPage />} />
-          <Route path="ads/:id/edit" element={<AdEditPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
+      <ErrorBoundary>
+        <Routes>
+          <Route path="/" element={<App />}>
+            <Route index element={<Navigate to="/ads" replace />} />
+            <Route path="ads" element={<AdsListPage />} />
+            <Route path="ads/:id" element={<AdDetailsPage />} />
+            <Route path="ads/:id/edit" element={<AdEditPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+        </Routes>
+      </ErrorBoundary>
     </BrowserRouter>
   );
 };

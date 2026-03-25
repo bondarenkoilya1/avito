@@ -8,3 +8,6 @@ export const ADS_PLURAL_VARIANTS: PluralizeVariants = {
   many: "объявлений",
   other: "объявления"
 };
+
+export const PAGE_SIZE = 10;
+export const SKELETON_COUNT = 10;

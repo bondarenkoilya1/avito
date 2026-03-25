@@ -33,17 +33,12 @@ export const AdDetailsHeader = ({
         </Link>
       </Flex>
 
-      <Flex justify="space-between" align="flex-start" className={css.header}>
-        <Flex vertical gap={8}>
-          <Typography.Title level={2} className={css.title}>
-            {title}
-          </Typography.Title>
-          <Button type="primary" icon={<EditOutlined />} onClick={() => onEdit(adId)}>
-            Редактировать
-          </Button>
-        </Flex>
+      <div className={css.header}>
+        <Typography.Title level={2} className={css.title}>
+          {title}
+        </Typography.Title>
 
-        <Flex vertical align="flex-end" gap={4}>
+        <div className={css.priceBlock}>
           {priceLabel && (
             <Typography.Title level={3} className={css.price}>
               {priceLabel}
@@ -55,8 +50,16 @@ export const AdDetailsHeader = ({
           <Typography.Text type="secondary" className={css.date}>
             Отредактировано: {updatedAtLabel}
           </Typography.Text>
-        </Flex>
-      </Flex>
+        </div>
+
+        <Button
+          type="primary"
+          icon={<EditOutlined />}
+          onClick={() => onEdit(adId)}
+          className={css.editButton}>
+          Редактировать
+        </Button>
+      </div>
     </>
   );
 };
