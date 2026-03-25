@@ -1,6 +1,5 @@
-import { useCallback, useEffect } from "react";
+import { type JSX, useCallback, useEffect } from "react";
 import { Button, Divider, Flex, Form, Input, Select, Typography } from "antd";
-import type { JSX } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useFormDraft } from "@/features/ads/hooks";
