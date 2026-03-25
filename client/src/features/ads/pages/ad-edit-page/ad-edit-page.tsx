@@ -4,8 +4,8 @@ import { useParams } from "react-router-dom";
 
 import { AdEditForm } from "@/features/ads/components/edit/ad-edit-form/ad-edit-form";
 import { AdEditFormSkeleton } from "@/features/ads/components/edit/ad-edit-form/ad-edit-form-skeleton";
-import { useAdAiGeneration } from "@/features/ads/hooks/use-ad-ai-generation";
 import { useGetAd } from "@/features/ads/hooks";
+import { useAdAiGeneration } from "@/features/ads/hooks/use-ad-ai-generation";
 
 import { Container } from "@/shared/ui";
 
