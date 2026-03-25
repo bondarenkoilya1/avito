@@ -62,7 +62,10 @@ const getSpecEntries = (params: AdType["params"]): SpecEntry[] => {
     entries.push({ label: "Этаж", value: params.floor });
   }
   if ("transmission" in params && params.transmission) {
-    entries.push({ label: "Коробка", value: TRANSMISSION[params.transmission] ?? params.transmission });
+    entries.push({
+      label: "Коробка",
+      value: TRANSMISSION[params.transmission] ?? params.transmission
+    });
   }
   if ("mileage" in params && params.mileage) {
     entries.push({ label: "Пробег", value: `${params.mileage} км` });

@@ -56,8 +56,7 @@ export const AdDetailsHeader = ({
           type="primary"
           icon={<EditOutlined />}
           onClick={() => onEdit(adId)}
-          className={css.editButton}
-        >
+          className={css.editButton}>
           Редактировать
         </Button>
       </div>
