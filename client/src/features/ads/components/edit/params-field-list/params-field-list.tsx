@@ -10,11 +10,14 @@ type ParamsFieldsListProps = {
 export const ParamsFieldsList = ({ fields }: ParamsFieldsListProps): JSX.Element => (
   <>
     {fields.map((field) => (
-      <Form.Item key={field.name} name={["params", field.name]} label={field.label}>
-        {field.type === "select" ? (
-          <Select options={field.options} placeholder={field.label} />
+      <Form.Item
+        key={Array.isArray(field.name) ? field.name.join("-") : field.name}
+        name={field.name}
+        label={field.label}>
+        {field.type === "input" ? (
+          <Input type={field.inputType} />
         ) : (
-          <Input type={field.inputType ?? "text"} placeholder={field.label} allowClear />
+          <Select options={field.options} />
         )}
       </Form.Item>
     ))}
