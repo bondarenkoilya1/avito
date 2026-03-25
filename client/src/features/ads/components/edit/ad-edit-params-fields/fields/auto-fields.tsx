@@ -1,7 +1,7 @@
 import { type JSX } from "react";
 
 import { ParamsFieldsList } from "@/features/ads/components";
-import { AUTO_TRANSMISSION_OPTIONS } from "@/features/ads/pages/ad-edit-page";
+import { AUTO_TRANSMISSION_OPTIONS } from "@/features/ads/components/edit/ad-edit-form/ad-edit-form.constants";
 import type { FieldConfig } from "@/features/ads/types";
 
 const FIELDS: FieldConfig[] = [

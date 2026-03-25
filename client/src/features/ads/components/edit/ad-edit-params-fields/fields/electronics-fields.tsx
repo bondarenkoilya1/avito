@@ -4,7 +4,7 @@ import { ParamsFieldsList } from "@/features/ads/components";
 import {
   ELECTRONICS_CONDITION_OPTIONS,
   ELECTRONICS_TYPE_OPTIONS
-} from "@/features/ads/pages/ad-edit-page";
+} from "@/features/ads/components/edit/ad-edit-form/ad-edit-form.constants";
 import type { FieldConfig } from "@/features/ads/types";
 
 const FIELDS: FieldConfig[] = [

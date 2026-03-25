@@ -3,11 +3,11 @@ import { Form, Input, Select } from "antd";
 
 import type { FieldConfig } from "@/features/ads/types";
 
+import css from "./params-field-list.module.css";
+
 type ParamsFieldsListProps = {
   fields: FieldConfig[];
 };
-
-import css from "../ad-edit-form/ad-edit-form.module.css";
 
 export const ParamsFieldsList = ({ fields }: ParamsFieldsListProps): JSX.Element => (
   <>

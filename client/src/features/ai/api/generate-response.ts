@@ -6,6 +6,9 @@ import type {
 
 import { apiOllama } from "@/shared/api";
 
+const AI_TEMPERATURE = 0.1;
+const AI_MAX_TOKENS = 300;
+
 export const generateResponse = async (
   payload: GenerateRequestType
 ): Promise<SimplifiedGenerateResponseType> => {
@@ -14,8 +17,8 @@ export const generateResponse = async (
     prompt: payload.prompt,
     stream: false,
     options: {
-      temperature: 0.1,
-      num_predict: 300
+      temperature: AI_TEMPERATURE,
+      num_predict: AI_MAX_TOKENS
     }
   });
 

@@ -3,38 +3,33 @@ import { Flex, Space, Typography } from "antd";
 
 import { Filter, PaginationComponent, Toolbar } from "@/features/ads/components";
 import { AdCardList } from "@/features/ads/components/list/ad-card-list";
-import { ADS_PLURAL_VARIANTS } from "@/features/ads/constants";
-import { useAdsFilters } from "@/features/ads/hooks";
+import { ADS_PLURAL_VARIANTS, PAGE_SIZE } from "@/features/ads/constants";
+import { FilterProvider, useFilterContext } from "@/features/ads/contexts";
 import { formatAdsCount } from "@/features/ads/utils";
 
 import { Container } from "@/shared/ui";
 
 import css from "./ads-list-page.module.css";
 
-const pageSize = 10;
-
-export const AdsListPage = (): JSX.Element => {
+const AdsListContent = (): JSX.Element => {
   const {
     items,
     total,
     isLoading,
     page,
     searchValue,
-    categories,
-    needsRevision,
     sortValue,
+    viewMode,
     setPage,
     search,
-    changeCategories,
-    changeNeedsRevision,
-    resetSearch,
-    sort
-  } = useAdsFilters(pageSize);
+    sort,
+    setViewMode
+  } = useFilterContext();
 
   return (
-    <Container>
+    <Container className={css.page}>
       <Flex vertical gap={16}>
-        <Space orientation="vertical" size={4}>
+        <Space orientation="vertical" size={4} className={css.header}>
           <Typography.Title level={3} className={css.title}>
             Мои объявления
           </Typography.Title>
@@ -45,15 +40,9 @@ export const AdsListPage = (): JSX.Element => {
           )}
         </Space>
 
-        <Flex align="stretch" gap={48} className={css.contentWrapper}>
+        <Flex align="stretch" gap={32} wrap="wrap" className={css.contentWrapper}>
           <aside className={css.filterWrapper}>
-            <Filter
-              selectedCategories={categories}
-              needsRevision={needsRevision}
-              onCategoriesChange={changeCategories}
-              onNeedsRevisionChange={changeNeedsRevision}
-              onReset={resetSearch}
-            />
+            <Filter />
           </aside>
 
           <Flex vertical gap={16} className={css.sectionWrapper}>
@@ -62,14 +51,16 @@ export const AdsListPage = (): JSX.Element => {
               onSearch={search}
               sortValue={sortValue}
               onSortChange={sort}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
             />
 
-            <AdCardList ads={items} isLoading={isLoading} />
+            <AdCardList ads={items} isLoading={isLoading} viewMode={viewMode} />
 
             <div className={css.pagination}>
               <PaginationComponent
                 current={page}
-                pageSize={pageSize}
+                pageSize={PAGE_SIZE}
                 total={total}
                 onChange={setPage}
               />
@@ -78,5 +69,13 @@ export const AdsListPage = (): JSX.Element => {
         </Flex>
       </Flex>
     </Container>
+  );
+};
+
+export const AdsListPage = (): JSX.Element => {
+  return (
+    <FilterProvider>
+      <AdsListContent />
+    </FilterProvider>
   );
 };

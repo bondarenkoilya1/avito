@@ -17,6 +17,12 @@
   width: 100% !important; /* внутренний input/select тянется на весь контейнер */
 }
 
+@media (max-width: 768px) {
+  .fieldFixedWidth {
+    max-width: 100%;
+  }
+}
+
 /* Цена: Input растягивается внутри flex, кнопка фиксированная */
 .priceInput {
   flex: 1;

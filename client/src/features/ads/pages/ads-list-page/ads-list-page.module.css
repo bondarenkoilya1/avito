@@ -1,3 +1,11 @@
+.page {
+  padding: 20px 0 32px;
+}
+
+.header {
+  padding-right: 56px;
+}
+
 .filterWrapper {
   flex: 0 0 256px;
 }
@@ -19,4 +27,17 @@
 
 .pagination {
   margin-top: auto;
+}
+
+@media (max-width: 1024px) {
+  .filterWrapper {
+    flex: 0 0 220px;
+  }
+}
+
+@media (max-width: 768px) {
+  .filterWrapper {
+    flex: 0 0 100%;
+    width: 100%;
+  }
 }

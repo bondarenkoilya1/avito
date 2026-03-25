@@ -6,3 +6,10 @@
 .title {
   margin: 0;
 }
+
+@media (max-width: 768px) {
+  .wrapper {
+    gap: 24px;
+    padding: 24px 16px;
+  }
+}
