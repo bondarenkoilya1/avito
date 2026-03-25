@@ -58,7 +58,7 @@ export const AdEditPage = (): JSX.Element => {
   return (
     <Container maxWidth={942}>
       <Title level={3} style={{ marginBottom: 24 }}>
-        w Редактирование объявления
+        Редактирование объявления
       </Title>
       <AdEditForm
         adId={adId}

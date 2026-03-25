@@ -12,7 +12,7 @@
   padding: 16px;
   border: none;
   border-radius: 12px;
-  background: #fff;
+  background: var(--ant-color-bg-container);
 }
 
 .card :global(.ant-collapse-body) {
@@ -22,10 +22,12 @@
 .card :global(.ant-collapse-ghost) > :global(.ant-collapse-item) > :global(.ant-collapse-header) {
   align-items: center;
   padding: 0 !important;
+  color: var(--ant-color-text-heading) !important;
 }
 
 .card :global(.ant-typography) {
   font-weight: 600;
+  color: var(--ant-color-text-heading);
 }
 
 .resetButton {
@@ -35,15 +37,15 @@
   border-radius: 12px !important;
 
   font-size: 15px;
-  color: #8c8c8c !important;
+  color: var(--ant-color-text-description) !important;
 
-  background: #fff !important;
+  background: var(--ant-color-bg-container) !important;
   box-shadow: none;
 }
 
 .resetButton:disabled {
-  color: #d9d9d9 !important;
-  background: #fff !important;
+  color: var(--ant-color-text-disabled) !important;
+  background: var(--ant-color-bg-container) !important;
 }
 
 .optionsWrapper {
