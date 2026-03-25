@@ -17,6 +17,17 @@ import css from "./ad-edit-form.module.css";
 const { Text } = Typography;
 const { TextArea } = Input;
 
+const PRICE_AI_LABELS = {
+  buttonDefault: "Узнать рыночную цену",
+  buttonLoading: "Выполняется запрос",
+  buttonRetry: "Повторить запрос",
+  popoverTitle: "Ответ AI:",
+  popoverErrorTitle: "Произошла ошибка при запросе к AI",
+  errorMessage: "Попробуйте повторить запрос или закройте уведомление",
+  applyButton: "Применить",
+  closeButton: "Закрыть"
+};
+
 type AdEditFormProps = {
   adId: number;
   initialValues?: AdType;
@@ -48,7 +59,6 @@ export const AdEditForm = ({
       form.setFieldsValue({
         ...initialValues,
         price: initialValues.price ?? undefined,
-        // Гарантируем, что params не undefined для AdUpdateType
         params: initialValues.params ?? {}
       } as AdUpdateType);
     }
@@ -67,7 +77,6 @@ export const AdEditForm = ({
 
       if (category === "auto" && params) {
         const p = params as Record<string, unknown>;
-
         formattedParams = {
           ...p,
           yearOfManufacture: p.yearOfManufacture ? Number(p.yearOfManufacture) : undefined,
@@ -95,10 +104,9 @@ export const AdEditForm = ({
   );
 
   const handleApplyPrice = useCallback(
-    (rawResponse: string): void => {
-      const parsed = extractPrice(rawResponse);
-      if (parsed !== null) {
-        form.setFieldsValue({ price: Number(parsed) } as AdUpdateType);
+    (cleanPrice: string): void => {
+      if (cleanPrice) {
+        form.setFieldsValue({ price: Number(cleanPrice) } as AdUpdateType);
         saveDraft();
       }
     },
@@ -146,7 +154,12 @@ export const AdEditForm = ({
           </Form.Item>
 
           {onGeneratePrice && (
-            <AiGenerateButton onGenerate={onGeneratePrice} onApply={handleApplyPrice} />
+            <AiGenerateButton
+              onGenerate={onGeneratePrice}
+              onTransform={(raw) => extractPrice(raw) ?? ""}
+              onApply={handleApplyPrice}
+              labels={PRICE_AI_LABELS}
+            />
           )}
         </Flex>
       </div>

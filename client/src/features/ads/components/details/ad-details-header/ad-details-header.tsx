@@ -1,6 +1,6 @@
 import { Button, Flex, Typography } from "antd";
 import type { JSX } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import css from "./ad-details-header.module.css";
 
@@ -23,14 +23,14 @@ export const AdDetailsHeader = ({
   updatedAtLabel,
   onEdit
 }: AdDetailsHeaderProps): JSX.Element => {
-  const navigate = useNavigate();
-
   return (
     <>
       <Flex justify="space-between" align="center">
-        <Button type="link" icon={<ArrowLeftOutlined />} onClick={() => navigate(-1)}>
-          К списку объявлений
-        </Button>
+        <Link to="/ads">
+          <Button type="link" icon={<ArrowLeftOutlined />}>
+            К списку объявлений
+          </Button>
+        </Link>
       </Flex>
 
       <Flex justify="space-between" align="flex-start" className={css.header}>

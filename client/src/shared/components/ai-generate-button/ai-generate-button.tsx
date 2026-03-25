@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { Button, Flex, Popover, Typography } from "antd";
-import type { JSX } from "react";
+import type { JSX, ReactNode } from "react";
 
 import css from "./ai-generate-button.module.css";
 
@@ -8,18 +8,32 @@ import { BulbOutlined, ReloadOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;
 
+interface AiLabels {
+  buttonDefault: string;
+  buttonLoading: string;
+  buttonRetry: string;
+  popoverTitle: string;
+  popoverErrorTitle?: string;
+  errorMessage?: string;
+  applyButton?: string;
+  closeButton?: string;
+}
+
 type AiGenerateButtonProps = {
   onGenerate: () => Promise<string>;
   onApply?: (value: string) => void;
+  onTransform?: (value: string) => string;
+  labels: AiLabels;
+  icon?: ReactNode;
 };
 
-const parsePrice = (text: string): string => {
-  const cleaned = text.replace(/\s(?=\d)/g, "");
-  const match = cleaned.match(/\d+/);
-  return match ? match[0] : "";
-};
-
-export const AiGenerateButton = ({ onGenerate, onApply }: AiGenerateButtonProps): JSX.Element => {
+export const AiGenerateButton = ({
+  onGenerate,
+  onApply,
+  onTransform,
+  labels,
+  icon = <BulbOutlined />
+}: AiGenerateButtonProps): JSX.Element => {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<string | null>(null);
   const [error, setError] = useState<boolean>(false);
@@ -47,18 +61,17 @@ export const AiGenerateButton = ({ onGenerate, onApply }: AiGenerateButtonProps)
 
   const handleApply = useCallback((): void => {
     if (response && onApply) {
-      const price = parsePrice(response);
-      onApply(price);
+      const finalValue = onTransform ? onTransform(response) : response;
+      onApply(finalValue);
     }
     setIsPopoverOpen(false);
-  }, [response, onApply]);
+  }, [response, onApply, onTransform]);
 
   const renderContent = (): JSX.Element => (
     <div className={css.content}>
       {error ? (
         <>
-          <Text type="danger">Произошла ошибка при запросе к AI</Text>
-          <Text type="secondary">Попробуйте повторить запрос или закройте уведомление</Text>
+          <Text type="danger">{labels.errorMessage || "Произошла ошибка"}</Text>
         </>
       ) : (
         <Text className={css.responseText}>{response}</Text>
@@ -66,11 +79,11 @@ export const AiGenerateButton = ({ onGenerate, onApply }: AiGenerateButtonProps)
 
       <Flex gap={8} justify="flex-end" className={css.actions} style={{ marginTop: 12 }}>
         <Button size="small" onClick={() => setIsPopoverOpen(false)}>
-          Закрыть
+          {labels.closeButton || "Закрыть"}
         </Button>
         {!error && onApply && (
           <Button type="primary" size="small" onClick={handleApply}>
-            Применить
+            {labels.applyButton || "Применить"}
           </Button>
         )}
       </Flex>
@@ -83,21 +96,19 @@ export const AiGenerateButton = ({ onGenerate, onApply }: AiGenerateButtonProps)
       onOpenChange={setIsPopoverOpen}
       trigger="click"
       placement="bottomLeft"
-      classNames={{
-        root: error ? css.popoverError : css.popover
-      }}
+      classNames={{ root: error ? css.popoverError : css.popover }}
       title={
         <Text strong className={css.title}>
-          {error ? "Ошибка" : "Средняя цена"}
+          {error ? labels.popoverErrorTitle || "Ошибка" : labels.popoverTitle}
         </Text>
       }
       content={renderContent()}>
       <Button
-        icon={hasRun && !loading ? <ReloadOutlined /> : <BulbOutlined />}
+        icon={hasRun && !loading ? <ReloadOutlined /> : icon}
         loading={loading}
         onClick={handleClick}
         className={css.button}>
-        {loading ? "Выполняется запрос" : hasRun ? "Повторить запрос" : "Узнать рыночную цену"}
+        {loading ? labels.buttonLoading : hasRun ? labels.buttonRetry : labels.buttonDefault}
       </Button>
     </Popover>
   );
