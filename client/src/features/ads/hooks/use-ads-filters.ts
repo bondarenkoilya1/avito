@@ -9,6 +9,8 @@ type UseAdsFiltersReturnType = {
   items: AdCardType[];
   total: number;
   isLoading: boolean;
+  isError: boolean;
+  errorMessage?: string;
   page: number;
   searchValue: string;
   categories: AdCategory[];
@@ -21,7 +23,6 @@ type UseAdsFiltersReturnType = {
   resetSearch: () => void;
   sort: (value: AdsSortValue) => void;
 };
-
 export const useAdsFilters = (pageSize: number): UseAdsFiltersReturnType => {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Number(searchParams.get("page") ?? 1);
@@ -30,7 +31,7 @@ export const useAdsFilters = (pageSize: number): UseAdsFiltersReturnType => {
   const needsRevision = searchParams.get("needsRevision") === "true";
   const sortValue = (searchParams.get("sort") ?? DEFAULT_ADS_SORT) as AdsSortValue;
 
-  const { items, total, isLoading } = useGetAds({
+  const { items, total, isLoading, isError, errorMessage } = useGetAds({
     q: searchValue,
     page,
     pageSize,
@@ -90,19 +91,19 @@ export const useAdsFilters = (pageSize: number): UseAdsFiltersReturnType => {
       return prev;
     });
 
-  useEffect(
-    () => {
-      if (!isLoading && items.length === 0 && page > 1) {
-        setPage(1);
-      }
-    }, // eslint-disable-next-line
-    [isLoading, items.length, page]
-  );
+  useEffect(() => {
+    if (!isLoading && items.length === 0 && page > 1) {
+      setPage(1);
+    }
+    // eslint-disable-next-line
+  }, [isLoading, items.length, page]);
 
   return {
     items,
     total,
     isLoading,
+    isError,
+    errorMessage,
     page,
     searchValue,
     categories,
